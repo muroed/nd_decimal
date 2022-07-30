@@ -14,6 +14,8 @@
 #define END_EXP_BIT 23
 #define ZERO_BIT 0
 #define SIGN_BIT 31
+#define OK 0
+#define ERR 1
 
 #define COLOR_HEADER "\033[95m"
 #define COLOR_BLUE "\033[94m"
@@ -31,6 +33,7 @@ int get_bit(int bits, int bit);
 int check_sign(s21_decimal a);
 int chang_sign(s21_decimal* a);
 s21_decimal nullify_all_decimal(s21_decimal *a);
+int set_bit(int bits, int bit, int new_bit);
 void print_decimal_bin(s21_decimal a); // for debug
 
 #endif  //  SRC_DECIMAL_CORE_H_

@@ -38,6 +38,15 @@ s21_decimal nullify_all_decimal(s21_decimal *a) {
     for (int i = 0; i < BITS; i++) a->bits[i] = 0;
     return *a;
 }
+//  Меняет в bits бит под номером bit на new_bit
+int set_bit(int bits, int bit, int new_bit) {
+    if (new_bit) {
+        bits = on_bit(bits, bit);
+    } else {
+        bits = off_bit(bits, bit);
+    }
+    return bits;
+}
 /*
 отображение decimal по битам
 bits[3]:
