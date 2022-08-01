@@ -1,18 +1,18 @@
 CC= gcc -std=c11 #-Wall -Wextra -Werror 
 LIBSOURCES= $(wildcard s21_*.c)
 LIBOBJECTS= $(LIBSOURCES:.c=.o)
-
+HEADER:= decimal_core.h s21_decimal.h
 
 all: $(LIBOBJECTS)
 	ar rc s21_decimal.a $^
 	ranlib s21_decimal.a
 
-core.a: core.c
-	$(CC) -c core.c
-	ar rc libcore.a core.o
+core.a: $(LIBSOURCES)
+	$(CC) -c $(LIBSOURCES) $(HEADER)
+	ar rc libcore.a $(LIBOBJECTS)
 	ranlib libcore.a
 
-main: core.a main.c
+main: clean core.a main.c
 	$(CC) main.c -o a.out -L. -lcore
 	./a.out
 

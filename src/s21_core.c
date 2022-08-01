@@ -1,5 +1,5 @@
 #include "decimal_core.h"
-#include "s21_decimal.h"
+
 //  включает бит под номером bit в bits
 int bit_on(int bits, int bit) {
     return bits | _2(bit);
@@ -41,9 +41,9 @@ s21_decimal nullify_all_decimal(s21_decimal *a) {
 //  Меняет в bits бит под номером bit на new_bit
 int set_bit(int bits, int bit, int new_bit) {
     if (new_bit) {
-        bits = on_bit(bits, bit);
+        bits = bit_on(bits, bit);
     } else {
-        bits = off_bit(bits, bit);
+        bits = bit_off(bits, bit);
     }
     return bits;
 }
