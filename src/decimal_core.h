@@ -29,14 +29,14 @@ int bit_on(int bits, int bit);
 int bit_off(int bits, int bit);
 int bit_swap(int bits, int bit);
 int bit_is(int bits, int bit);
-int get_global_bit(s21_decimal a, int gbit);
-int get_bits(s21_decimal a, int gbit);
+int get_global_bit(s21_decimal decim, int gbit);
+int get_bits(s21_decimal decim, int gbit);
 int get_bit(int bits, int bit);
-int check_sign(s21_decimal a);
-int chang_sign(s21_decimal* a);
-s21_decimal nullify_all_decimal(s21_decimal *a);
+int check_sign(s21_decimal decim);
+int chang_sign(s21_decimal* decim);
+s21_decimal nullify_all_decimal(s21_decimal *decim);
 int set_bit(int bits, int bit, int new_bit);
-void print_decimal_bin(s21_decimal a); // for debug
+void print_decimal_bin(s21_decimal decim); // for debug
 int get_exp(s21_decimal decim);
 int set_exp(s21_decimal* decim, int new_exp);
 
