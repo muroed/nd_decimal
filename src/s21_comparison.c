@@ -35,3 +35,16 @@ int s21_is_greater(s21_decimal decim1, s21_decimal decim2) {
         }
     }
 }
+
+int s21_is_less(s21_decimal decim1, s21_decimal decim2) {
+    int res_greater = 0;
+    int bit1, bit2;
+    if (get_exp(decim1) < get_exp(decim2)) res_greater = 1;
+    else
+        for (int bit = ALL_BIT - BITS_IN_INT - 1; bit >= 0; bit--) {
+        if ((bit1 = get_global_bit(decim1, bit)) != (bit2 = get_global_bit(decim2, bit))) {
+            if (bit1 < bit2) res_greater = 1;
+            break;
+        }
+    }
+}

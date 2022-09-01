@@ -10,5 +10,6 @@ typedef struct {
 int s21_is_equal(s21_decimal decim1, s21_decimal decim2);
 int s21_is_not_equal(s21_decimal decim1, s21_decimal decim2);
 int s21_is_greater(s21_decimal decim1, s21_decimal decim2);
+int s21_is_less(s21_decimal decim1, s21_decimal decim2);
 
 #endif  //  SRC_S21_DECIMAL_H_
