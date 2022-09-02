@@ -7,6 +7,8 @@ typedef struct {
     int bits[4];
 } s21_decimal;
 
+
+//  comparison
 int s21_is_equal(s21_decimal decim1, s21_decimal decim2);
 int s21_is_not_equal(s21_decimal decim1, s21_decimal decim2);
 int s21_is_greater_or_equal(s21_decimal decim1, s21_decimal decim2);
