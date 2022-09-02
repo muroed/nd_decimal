@@ -4,7 +4,7 @@
 
 int main() {
     s21_decimal a = {{123435, 14567, 1, 0}};
-    s21_decimal a1 = {{17891, 14567, 4, 0}};
+    s21_decimal a1 = {{17891, 14567, 1, 0}};
     s21_decimal a2 = {{17890, 14567, 1, 0}};
     // set_exp(&a, 27);
     // print_decimal_bin(a);
@@ -18,8 +18,8 @@ int main() {
     printf("\n");
     print_decimal_bin(a2);
     printf("\n");
-    printf("__%s__\n", s21_is_greater(a2, a1) == 0 ? "True" : "False");
-    printf("__%s__", s21_is_less(a1, a2) == 0 ? "True" : "False");
+    printf("__%s__\n", s21_is_greater_or_equal(a2, a1) == 1 ? "True" : "False");
+    printf("__%s__", s21_is_less_or_equal(a1, a2) == 1 ? "True" : "False");
 
     return 0;
 }
