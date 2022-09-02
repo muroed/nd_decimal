@@ -36,7 +36,8 @@ int check_sign(s21_decimal decim);
 int chang_sign(s21_decimal* decim);
 s21_decimal nullify_all_decimal(s21_decimal *decim);
 int set_bit(int bits, int bit, int new_bit);
-void print_decimal_bin(s21_decimal decim); // for debug
+// for debug
+void print_decimal_bin(s21_decimal decim);
 int get_exp(s21_decimal decim);
 int set_exp(s21_decimal* decim, int new_exp);
 
