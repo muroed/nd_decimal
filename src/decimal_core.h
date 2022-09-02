@@ -35,6 +35,7 @@ int get_bit(int bits, int bit);
 int check_sign(s21_decimal decim);
 int chang_sign(s21_decimal* decim);
 s21_decimal nullify_all_decimal(s21_decimal *decim);
+int is_null_decimal(s21_decimal decim);
 int set_bit(int bits, int bit, int new_bit);
 // for debug
 void print_decimal_bin(s21_decimal decim);

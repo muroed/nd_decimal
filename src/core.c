@@ -1,4 +1,5 @@
 #include "decimal_core.h"
+#include "s21_decimal.h"
 
 //  включает бит под номером bit в bits
 int bit_on(int bits, int bit) { return bits | _2(bit % BITS_IN_INT); }
@@ -122,4 +123,9 @@ int set_exp(s21_decimal *decim, int new_exp) {
   if (check_sign(*decim) != sign)
     chang_sign(decim);
   return decim->bits[INFO_BIT];
+}
+
+int is_null_decimal(s21_decimal decim) {
+  s21_decimal null_decimal = {{0,0,0,0}};
+  return s21_is_equal(decim, null_decimal);
 }
