@@ -20,15 +20,6 @@ test: core.a main.c
 	$(CC) main.c -o a.out -L. -lcore
 	./a.out
 
-gcov_report: $(TEST_OBJ_DIR)/main.o $(GCOV_OBJ) $(MATH_SRC)
-	ar rc s21_math.a $(GCOV_OBJ)
-	ranlib 	s21_math.a
-	$(CC) $(LFLAGS) --coverage $(TEST_OBJ) $(TEST_OBJ_DIR)/main.o s21_math.a -o test
-	- ./test
-	./../materials/lcov/bin/lcov -f -c --directory . -o ./coverage.info 
-	./../materials/lcov/bin/genhtml coverage.info --output-directory=res
-	#rm -f *.gcda *.gcov *.o *.gcno
-	open res/index.html
 clean:
 	@rm -rf *.a
 	@rm -rf *.o
@@ -36,4 +27,9 @@ clean:
 
 
 style:
-	python3 ../materials/linters/cpplint.py --extensions=c,h *.c *.h
+	@cp ../materials/linters/.clang-format ./.clang-format
+	@clang-format -n *.c
+#	@clang-format -n *.h
+#	@clang-format -n $(TEST_DIR)*.c
+#	@clang-format -n $(TEST_DIR)*.h
+	@rm .clang-format
