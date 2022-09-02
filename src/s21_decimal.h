@@ -16,6 +16,11 @@ int s21_is_greater(s21_decimal decim1, s21_decimal decim2);
 int s21_is_less_or_equal(s21_decimal decim1, s21_decimal decim2);
 int s21_is_less(s21_decimal decim1, s21_decimal decim2);
 
+// convert
+int s21_from_int_to_decimal(int src_int, s21_decimal *dst_decimal);
+int s21_from_float_to_decimal(float src_float, s21_decimal *dst_decimal);
+int s21_from_decimal_to_int(s21_decimal src_decimal, int *dst_int);
+int s21_from_decimal_to_float(s21_decimal src_decimal, float *dst_float);
 
 
 #endif  //  SRC_S21_DECIMAL_H_
