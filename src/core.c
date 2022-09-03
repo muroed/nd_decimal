@@ -183,7 +183,7 @@ s21_decimal bit_swift_right(s21_decimal decim, int number) {
 
   return result;
 }
-
+// ^
 s21_decimal bit_exclusive_or(s21_decimal decim1, s21_decimal decim2) {
   s21_decimal result;
   nullify_all_decimal(&result);
@@ -192,12 +192,22 @@ s21_decimal bit_exclusive_or(s21_decimal decim1, s21_decimal decim2) {
   }
   return result;
 }
-
+// &
 s21_decimal bit_and(s21_decimal decim1, s21_decimal decim2) {
   s21_decimal result;
   nullify_all_decimal(&result);
   for (int i = 0; i < BITS - 1; i++) {
     result.bits[i] = decim1.bits[i] & decim2.bits[i];
+  }
+  return result;
+}
+
+// ~
+s21_decimal bit_negative(s21_decimal decim) {
+    s21_decimal result;
+  nullify_all_decimal(&result);
+  for (int i = 0; i < BITS - 1; i++) {
+    result.bits[i] = ~decim.bits[i];
   }
   return result;
 }
