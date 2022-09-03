@@ -24,25 +24,20 @@ int s21_from_decimal_to_int(s21_decimal src, int *dst) {
         result = 1;
     } else {
         s21_truncate(src, &src);
-        printf("%d\n", result);
 
         for (int i = 1; i < 3; i++) {
             for (int j = 0; j < 16; j++) {
-                if (get_bit(i, j) == 1) {
-                    printf("%d %d\n", i , j);
-
-         //           result = 1;
-          //          break;
+                if (get_bit(src.bits[i], j) == 1) {
+                    result = 1;
+                    break;
                 }
             }
             if (result == 1) {
-    //            break;
+                break;
             }
         }
-        printf("%d\n", result);
 
         if (result == 0) {
-            printf("ya tut\n");
             if (check_sign(src) == 1)
                 *dst = 0 - src.bits[0];
             else
