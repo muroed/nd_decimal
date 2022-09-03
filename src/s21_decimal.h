@@ -29,4 +29,6 @@ int s21_mul(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal)
 int s21_div(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
 int s21_mod(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
 
+//other
+int s21_truncate(s21_decimal value, s21_decimal *result);
 #endif  //  SRC_S21_DECIMAL_H_

@@ -14,33 +14,48 @@ int s21_from_int_to_decimal(int src_int, s21_decimal *dst_decimal) {
   return error_mark;
 }
 
-// int s21_from_decimal_to_int(s21_decimal src_decimal, int *dst_int) {
-//   int error_mark = 0;
-//   if (!dst_int)
-//     error_mark = 0;
-//   else {
-//     int exp = get_exp(src_decimal);
-//     s21_decimal 
-//   }
-// }
+int s21_from_decimal_to_int(s21_decimal src, int *dst) {
+    int result = 0;
+    int ten_pow = get_exp(src);
+    if (!dst) {
+        result = 1;
+    } else if (ten_pow > 28) {
+        *dst = 0;
+        result = 1;
+    } else {
+        s21_truncate(src, &src);
+        printf("%d\n", result);
 
+        for (int i = 1; i < 3; i++) {
+            for (int j = 0; j < 16; j++) {
+                if (get_bit(i, j) == 1) {
+                    printf("%d %d\n", i , j);
 
-// int s21_from_decimal_to_int(s21_decimal src, int *dst) {
-//     int error_mark = 0;
-//     if (!dst) {
-//         error_mark = 1;
-//     } else {
-//         int scale = get_scale(src), sign;
-//         sign = (get_sign(src)) ? -1 : 1;
-//         s21_decimal ten;
-//         s21_from_int_to_decimal(10, &ten);
-//         while (scale > 0) {
-//             div_simple(src, ten, &src);
-//             scale--;
-//         }
-//         set_bit_zero(&src, 31);
-//         *dst = src.bits[0];
-//         *dst *= sign;
-//     }
-//     return error_mark;
-// }
+         //           result = 1;
+          //          break;
+                }
+            }
+            if (result == 1) {
+    //            break;
+            }
+        }
+        printf("%d\n", result);
+
+        if (result == 0) {
+            printf("ya tut\n");
+            if (check_sign(src) == 1)
+                *dst = 0 - src.bits[0];
+            else
+                *dst = src.bits[0];
+            if (*dst) *dst = set_bit(*dst, 31, check_sign(src));
+
+        }
+    }
+    return result;
+}
+
+int s21_truncate(s21_decimal value, s21_decimal *result) {
+    *result = bit_swift_right(value, get_exp(value));
+    set_exp(result, 0);
+    return 0;
+}
