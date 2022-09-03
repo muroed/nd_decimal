@@ -113,3 +113,57 @@ int sub_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
     }
   }
 }
+
+// Удалить знаковый бит
+// int getSign(int n) {
+//     return n >> 31;
+// } 
+
+// // Находим абсолютное значение n
+// int positive(int n) {
+//     return (getSign(n) & 1) ? negtive(n) : n;
+// }
+
+// int multiply(int a, int b) {
+//     // Если двухзначные биты знака несовместимы, результат отрицательный
+//     bool isNegtive = false;
+//     if(getSign(a) ^ getSign(b))
+//         isNegtive = true;
+//     a = positive(a);
+//     b = positive(b);
+//     int res = 0;
+//     while (b | 0) {
+//         // Когда соответствующий бит b равен 1, нужно только добавить
+//         if(b & 1)
+//             res = add(res, a);
+//         a = a << 1; // сдвиг влево
+//         b = b >> 1; // б сдвиг вправо
+//     }
+//     return isNegtive == true ? negtive(res) : res;
+// }
+
+
+// int res = 0;
+//     while (b | 0) {
+//         // Когда соответствующий бит b равен 1, нужно только добавить
+//         if(b & 1)
+//             res = add(res, a);
+//         a = a << 1; // сдвиг влево
+//         b = b >> 1; // б сдвиг вправо
+//     }
+//     return isNegtive == true ? negtive(res) : res;
+// }
+int mul_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
+  int error_mark = 0;
+  s21_decimal zero = {{0, 0, 0, 0}};
+  s21_decimal one = {{1, 0, 0, 0}};
+  nullify_all_decimal(result_decimal);
+  
+  while (s21_is_not_equal(bit_or(decim2, zero), zero) == 1) {
+    if (s21_is_equal(bit_and(decim2, one), one) == 1)
+      add_lite(*result_decimal, decim1, result_decimal);
+    error_mark = bit_swift_left(decim1, 1, &decim1);
+    decim2 = bit_swift_right(decim2, 1);
+  }
+  return error_mark;
+}
