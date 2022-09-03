@@ -18,7 +18,8 @@
 //     return res;
 // }
 
-int s21_add(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal) {
+// add without degree
+int s21_add_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal) {
   unsigned int error_mark = 0;
   s21_decimal carry;
   nullify_all_decimal(result_decimal);
