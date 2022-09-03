@@ -149,20 +149,23 @@ int swift_bits_right(int bits, int number) {
   return bits;
 }
 
-s21_decimal bit_swift_left(s21_decimal decim, int number) {
-  s21_decimal result;
-  nullify_all_decimal(&result);
+int bit_swift_left(s21_decimal decim, int number, s21_decimal* result) {
+  int error_mark = 0;
+  nullify_all_decimal(result);
   int buffer_bits = 0;
-  result.bits[INFO_BIT] = decim.bits[INFO_BIT];
+  result->bits[INFO_BIT] = decim.bits[INFO_BIT];
 
   for (int i = 0; i < BITS - 1; i++) {
     if (i != 0)
       buffer_bits = swift_bits_right(decim.bits[i-1], (BITS_IN_INT - (number % BITS_IN_INT)));
-    result.bits[i] = decim.bits[i] << number;
-    result.bits[i] = result.bits[i] | buffer_bits;
+    if (i == 2)
+      if (swift_bits_right(decim.bits[i], (BITS_IN_INT - (number % BITS_IN_INT))) != 0)
+        error_mark = 1; // 1 - число слишком велико или равно бесконечности
+    result->bits[i] = decim.bits[i] << number;
+    result->bits[i] = result->bits[i] | buffer_bits;
   }
 
-  return result;
+  return error_mark;
 }
 
 s21_decimal bit_swift_right(s21_decimal decim, int number) {
