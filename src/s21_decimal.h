@@ -25,6 +25,8 @@ int s21_from_decimal_to_float(s21_decimal src_decimal, float *dst_float);
 // arifmetic help
 int add_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
 int add_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
+int sub_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
+s21_decimal negative_decimal(s21_decimal decim);
 
 // arifmetic
 int s21_add(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);

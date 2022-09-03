@@ -46,12 +46,26 @@ int add_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
     error_mark = add_lite(decim1, decim2, result_decimal);
   } else if (sign_decim1 == 1) {
     chang_sign(&decim1);
-    // error_mark = s21_sub(decim2, decim1, result_decimal);
+    error_mark = sub_lite(decim2, decim1, result_decimal);
   } else if (sign_decim2 == 1) {
     chang_sign(&decim2);
-    // error_mark = s21_sub(decim1, decim2, result_decimal);
+    error_mark = sub_lite(decim1, decim2, result_decimal);
   } else {
     error_mark = add_lite(decim1, decim2, result_decimal);
   }
   return error_mark;
+}
+
+// int negtive(int n) {
+//     return add(~n, 1);
+// }
+
+s21_decimal negative_decimal(s21_decimal decim) {
+  s21_decimal one = {{1, 0, 0, 0}};
+  add_lite(bit_negative(decim), one, &decim);  
+  return decim;
+}
+// ПРОВЕРИТЬ НОМЕРА ОШИБОК!!!
+int sub_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal) {
+  return !add_lite(decim1, negative_decimal(decim2), result_decimal);
 }
