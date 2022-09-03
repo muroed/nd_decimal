@@ -39,7 +39,13 @@ int is_null_decimal(s21_decimal decim);
 int set_bit(int bits, int bit, int new_bit);
 // for debug
 void print_decimal_bin(s21_decimal decim);
+void print_int_bin(int int_number);
 int get_exp(s21_decimal decim);
 int set_exp(s21_decimal* decim, int new_exp);
+
+s21_decimal bit_swift_right(s21_decimal decim, int number);
+s21_decimal bit_swift_left(s21_decimal decim, int number);
+s21_decimal bit_exclusive_or(s21_decimal decim1, s21_decimal decim2);
+s21_decimal bit_and(s21_decimal decim1, s21_decimal decim2);
 
 #endif  //  SRC_DECIMAL_CORE_H_

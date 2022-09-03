@@ -60,10 +60,12 @@ bits[2] - bits[0]:
 Красные единицы
 Белые нули
 */
+
 void print_decimal_bin(s21_decimal decim) {
   for (int i = BITS - 1; i >= 0; i--) {
     int n = BITS_IN_INT - 1;
-    printf("|%sbits[%d]%s|", COLOR_BLUE, i, COLOR_END);
+    printf("|%s[%d]%s|", COLOR_BLUE, i, COLOR_END);
+    // printf("|%sbits[%d]%s|", COLOR_BLUE, i, COLOR_END);
     if (i == BITS - 1) {
       printf("%s%d%s", COLOR_GREEN, get_bit(decim.bits[i], SIGN_BIT),
              COLOR_END);
@@ -97,6 +99,13 @@ void print_decimal_bin(s21_decimal decim) {
   }
 }
 
+void print_int_bin(int int_number) {
+  printf("\n__INT__\n");
+  s21_decimal test = {{int_number, int_number, int_number, 0}};
+  print_decimal_bin(test);
+  printf("\n");
+}
+
 /*
 Лучше начать с дополнительных функций, get bit(получение бита 0 или 1), set
 bit(замена 0 бита на 1), change bit, nullify bit, print_decimal_bin( в двоичном
@@ -128,4 +137,54 @@ int set_exp(s21_decimal *decim, int new_exp) {
 int is_null_decimal(s21_decimal decim) {
   s21_decimal null_decimal = {{0,0,0,0}};
   return s21_is_equal(decim, null_decimal);
+}
+
+s21_decimal bit_swift_left(s21_decimal decim, int number) {
+  s21_decimal result;
+  nullify_all_decimal(&result);
+  int buffer_bits = 0;
+  result.bits[INFO_BIT] = decim.bits[INFO_BIT];
+
+  for (int i = 0; i < BITS - 1; i++) {
+    if (i != 0)
+      buffer_bits = decim.bits[i-1] >> (BITS_IN_INT - (number % BITS_IN_INT));
+    result.bits[i] = decim.bits[i] << number;
+    result.bits[i] = result.bits[i] | buffer_bits;
+  }
+
+  return result;
+}
+
+s21_decimal bit_swift_right(s21_decimal decim, int number) {
+  s21_decimal result;
+  nullify_all_decimal(&result);
+  int buffer_bits = 0;
+  result.bits[INFO_BIT] = decim.bits[INFO_BIT];
+
+  for (int i = BITS - 2; i >= 0; i--) {
+    if (i != BITS - 2)
+      buffer_bits = decim.bits[i+1] << (BITS_IN_INT - (number % BITS_IN_INT));
+    result.bits[i] = decim.bits[i] >> number;
+    result.bits[i] = result.bits[i] | buffer_bits;
+  }
+
+  return result;
+}
+
+s21_decimal bit_exclusive_or(s21_decimal decim1, s21_decimal decim2) {
+  s21_decimal result;
+  nullify_all_decimal(&result);
+  for (int i = 0; i < BITS - 1; i++) {
+    result.bits[i] = decim1.bits[i] ^ decim2.bits[i];
+  }
+  return result;
+}
+
+s21_decimal bit_and(s21_decimal decim1, s21_decimal decim2) {
+  s21_decimal result;
+  nullify_all_decimal(&result);
+  for (int i = 0; i < BITS - 1; i++) {
+    result.bits[i] = decim1.bits[i] & decim2.bits[i];
+  }
+  return result;
 }
