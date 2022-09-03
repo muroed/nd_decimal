@@ -97,6 +97,7 @@ void print_decimal_bin(s21_decimal decim) {
       }
     }
   }
+  printf("\n");
 }
 
 void print_int_bin(int int_number) {
@@ -139,6 +140,15 @@ int is_null_decimal(s21_decimal decim) {
   return s21_is_equal(decim, null_decimal);
 }
 
+int swift_bits_right(int bits, int number) {
+  if (bits < 0) {
+    bits = bit_off(bits, SIGN_BIT);
+    bits = bits >> number;
+    bits = bit_on(bits, SIGN_BIT - number);
+  } else {bits = bits >> number;}
+  return bits;
+}
+
 s21_decimal bit_swift_left(s21_decimal decim, int number) {
   s21_decimal result;
   nullify_all_decimal(&result);
@@ -147,7 +157,7 @@ s21_decimal bit_swift_left(s21_decimal decim, int number) {
 
   for (int i = 0; i < BITS - 1; i++) {
     if (i != 0)
-      buffer_bits = decim.bits[i-1] >> (BITS_IN_INT - (number % BITS_IN_INT));
+      buffer_bits = swift_bits_right(decim.bits[i-1], (BITS_IN_INT - (number % BITS_IN_INT)));
     result.bits[i] = decim.bits[i] << number;
     result.bits[i] = result.bits[i] | buffer_bits;
   }
@@ -164,7 +174,7 @@ s21_decimal bit_swift_right(s21_decimal decim, int number) {
   for (int i = BITS - 2; i >= 0; i--) {
     if (i != BITS - 2)
       buffer_bits = decim.bits[i+1] << (BITS_IN_INT - (number % BITS_IN_INT));
-    result.bits[i] = decim.bits[i] >> number;
+    result.bits[i] = swift_bits_right(decim.bits[i], number);
     result.bits[i] = result.bits[i] | buffer_bits;
   }
 

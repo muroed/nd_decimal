@@ -43,6 +43,7 @@ void print_int_bin(int int_number);
 int get_exp(s21_decimal decim);
 int set_exp(s21_decimal* decim, int new_exp);
 
+int swift_bits_right(int bits, int number);
 s21_decimal bit_swift_right(s21_decimal decim, int number);
 s21_decimal bit_swift_left(s21_decimal decim, int number);
 s21_decimal bit_exclusive_or(s21_decimal decim1, s21_decimal decim2);
