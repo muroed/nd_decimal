@@ -49,5 +49,6 @@ int bit_swift_left(s21_decimal decim, int number, s21_decimal* result);
 s21_decimal bit_exclusive_or(s21_decimal decim1, s21_decimal decim2);
 s21_decimal bit_and(s21_decimal decim1, s21_decimal decim2);
 s21_decimal bit_negative(s21_decimal decim);
+s21_decimal bit_or(s21_decimal decim1, s21_decimal decim2);
 
 #endif  //  SRC_DECIMAL_CORE_H_
