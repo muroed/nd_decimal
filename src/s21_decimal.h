@@ -23,7 +23,8 @@ int s21_from_decimal_to_int(s21_decimal src_decimal, int *dst_int);
 int s21_from_decimal_to_float(s21_decimal src_decimal, float *dst_float);
 
 // arifmetic help
-int s21_add_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
+int add_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
+int add_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
 
 // arifmetic
 int s21_add(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
