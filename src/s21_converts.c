@@ -59,3 +59,4 @@ int s21_truncate(s21_decimal value, s21_decimal *result) {
     set_exp(result, 0);
     return 0;
 }
+
