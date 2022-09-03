@@ -69,3 +69,47 @@ s21_decimal negative_decimal(s21_decimal decim) {
 int sub_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal) {
   return !add_lite(decim1, negative_decimal(decim2), result_decimal);
 }
+/*
+ 1 - 2
+'+' '+'
+   >    '+'
+   <    '-'
+'+' '-'
+   >    '+'
+   <    '+'
+'-' '-'
+   >    '-'
+   <    '+'
+'-' '+'
+   >    '-'
+   <    '-'
+*/
+
+//   ПРОВЕРИТЬ ЛОГИКУ !!!!
+int sub_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal) {
+  int error_mark = 0;
+  int sign_decim1 = check_sign(decim1);
+  int sign_decim2 = check_sign(decim2);
+  int priority = s21_is_greater(decim1, decim2);
+
+  if (sign_decim1 == 1 && sign_decim2 == 1) {
+    if (priority == 1) {
+      error_mark = sub_lite(decim1, decim2, result_decimal);
+      chang_sign(result_decimal);
+    } else {
+      error_mark = sub_lite(decim2, decim1, result_decimal);
+    }
+  } else if (sign_decim1 == 1) {
+    error_mark = add_lite(decim1, decim2, result_decimal);
+    chang_sign(result_decimal);
+  } else if (sign_decim2 == 1) {
+    error_mark = add_lite(decim1, decim2, result_decimal);
+  } else {
+    if (priority == 1) {
+      error_mark = sub_lite(decim1, decim2, result_decimal);
+    } else {
+      error_mark = sub_lite(decim2, decim1, result_decimal);
+      chang_sign(result_decimal);
+    }
+  }
+}
