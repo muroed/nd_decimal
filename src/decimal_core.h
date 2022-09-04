@@ -16,6 +16,7 @@
 #define SIGN_BIT 31
 #define OK 0
 #define ERR 1
+#define MAX_EXP 28
 
 #define COLOR_HEADER "\033[95m"
 #define COLOR_BLUE "\033[94m"

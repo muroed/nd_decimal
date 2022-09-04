@@ -218,15 +218,15 @@ int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal
 
 int div_exp(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
   int error_mark = 0;
+  int exp_buffer = 0;
   s21_decimal zero = {{0, 0, 0, 0}};
   s21_decimal ten = {{10, 0, 0, 0}};
   s21_decimal remainder, new_result;
   nullify_all_decimal(&remainder);
 
 
-  while (s21_is_equal(decim1, zero) == 0 && get_exp(*result_decimal) <= 28) {
+  while (s21_is_not_equal(decim1, zero) && (exp_buffer=get_exp(*result_decimal)) < MAX_EXP && !error_mark) {
     div_lite(decim1, decim2, &new_result, &remainder);
-    int exp_buffer = get_exp(*result_decimal);
     add_lite(*result_decimal, new_result, result_decimal);
     set_exp(result_decimal, exp_buffer);
     if (s21_is_not_equal(remainder, zero) == 1) {
