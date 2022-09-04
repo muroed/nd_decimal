@@ -254,3 +254,23 @@ int div_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal
 
   return error_mark;
 }
+
+int mod_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal) {
+  int error_mark = 0;
+  nullify_all_decimal(result_decimal);
+  s21_decimal null;
+  error_mark = div_lite(decim1, decim2, &null, result_decimal);
+  return error_mark;
+}
+
+int mod_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
+  int error_mark = 0;
+
+  if (check_sign(decim1) == 1) {
+    error_mark = mod_lite(decim1, decim2, result_decimal);
+    chang_sign(result_decimal);
+  } else {
+    error_mark = mod_lite(decim1, decim2, result_decimal);
+  }
+  return error_mark;
+}

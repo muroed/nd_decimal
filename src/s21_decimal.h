@@ -34,6 +34,7 @@ int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal
 int div_exp(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal);
 int div_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal);
 int mod_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
+int mod_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal);
 
 // arifmetic
 int s21_add(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
