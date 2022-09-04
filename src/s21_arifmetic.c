@@ -211,8 +211,8 @@ int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal
   while (s21_is_greater_or_equal(decim1, decim2) == 1) {
     error_mark = add_lite(*result_decimal, one, result_decimal);
     sub_lite(decim1, decim2, &decim1);
-    *remainder = decim1;
   }
+    *remainder = decim1;
   return error_mark;
 }
 
