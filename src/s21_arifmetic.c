@@ -238,3 +238,19 @@ int div_exp(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal)
   }
   return error_mark;
 }
+
+int div_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
+  nullify_all_decimal(result_decimal);
+  int error_mark = 0;
+  int sign_decim1 = check_sign(decim1);
+  int sign_decim2 = check_sign(decim2);
+
+  if (sign_decim1 == sign_decim2)
+    error_mark = div_exp(decim1, decim2, result_decimal);
+  else {
+    error_mark = div_exp(decim1, decim2, result_decimal);
+    chang_sign(result_decimal);
+  }
+
+  return error_mark;
+}
