@@ -112,6 +112,7 @@ int sub_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
       chang_sign(result_decimal);
     }
   }
+  return error_mark;
 }
 
 // Удалить знаковый бит
