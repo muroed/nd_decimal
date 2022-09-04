@@ -172,12 +172,69 @@ int mul_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
   int error_mark = 0;
   int sign_decim1 = check_sign(decim1);
   int sign_decim2 = check_sign(decim2);
+  nullify_all_decimal(result_decimal);
 
   if (sign_decim1 == sign_decim2)
     error_mark = mul_lite(decim1, decim2, result_decimal);
   else {
     error_mark = mul_lite(decim1, decim2, result_decimal);
     chang_sign(result_decimal);
+  }
+  return error_mark;
+}
+
+// int divide(int a, int b) {
+//     // Делитель не может быть 0
+//     if (b == 0)
+//         throw std::runtime_error("Divided can't be zero...");
+
+//     bool isNegtive = false;
+//     if (getSign(a) ^ getSign(b))
+//         isNegtive = true;
+
+//     a = positive(a);
+//     b = positive(b);
+
+//     int res = 0;
+//     while (a >= b) {
+//         res = add(res, 1);
+//         a = subtraction(a, b);
+//     }
+//     return beNegtive == true ? negtive(res) : res;
+// }
+
+int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal, s21_decimal* remainder) {
+  int error_mark = 0;
+  s21_decimal one = {{1, 0, 0, 0}};
+  nullify_all_decimal(result_decimal);
+
+  while (s21_is_greater_or_equal(decim1, decim2) == 1) {
+    error_mark = add_lite(*result_decimal, one, result_decimal);
+    sub_lite(decim1, decim2, &decim1);
+    *remainder = decim1;
+  }
+  return error_mark;
+}
+
+int div_exp(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
+  int error_mark = 0;
+  s21_decimal zero = {{0, 0, 0, 0}};
+  s21_decimal ten = {{10, 0, 0, 0}};
+  s21_decimal remainder, new_result;
+  nullify_all_decimal(&remainder);
+
+
+  while (s21_is_equal(decim1, zero) == 0 && get_exp(*result_decimal) <= 28) {
+    div_lite(decim1, decim2, &new_result, &remainder);
+    int exp_buffer = get_exp(*result_decimal);
+    add_lite(*result_decimal, new_result, result_decimal);
+    set_exp(result_decimal, exp_buffer);
+    if (s21_is_not_equal(remainder, zero) == 1) {
+      mul_lite(remainder, ten, &remainder);
+      mul_lite(*result_decimal, ten, result_decimal);
+      set_exp(result_decimal, exp_buffer + 1);
+    }
+    decim1 = remainder;
   }
   return error_mark;
 }
