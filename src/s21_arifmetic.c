@@ -56,6 +56,21 @@ int add_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
   return error_mark;
 }
 
+int  s21_add(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
+  int error_mark = 0;
+  int exp_decim1 = get_exp(decim1);
+  int exp_decim2 = get_exp(decim2);
+
+  if (exp_decim1 < exp_decim2) swap_int(&exp_decim1, &exp_decim2);
+
+  error_mark = truncate_to_exp(decim1, exp_decim1 - exp_decim2, &decim1);
+  if (error_mark == 0) error_mark = truncate_to_exp(decim2, exp_decim1 - exp_decim2, &decim2);
+
+  if (error_mark == 0) error_mark = add_sign(decim1, decim2, result_decimal);
+
+  return error_mark;
+}
+
 // int negtive(int n) {
 //     return add(~n, 1);
 // }
