@@ -43,4 +43,7 @@ int s21_mul(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal)
 int s21_div(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
 int s21_mod(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
 
+// another
+int s21_negative(s21_decimal decim, s21_decimal *result_decimal);
+
 #endif  //  SRC_S21_DECIMAL_H_
