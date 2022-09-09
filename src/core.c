@@ -221,3 +221,24 @@ s21_decimal bit_or(s21_decimal decim1, s21_decimal decim2) {
   }
   return result;
 }
+
+int truncate_to_exp(s21_decimal decim, int new_exp, s21_decimal* result_decimal) {
+  int exp = get_exp(decim);
+  int sign = check_sign(decim);
+  int error_mark = 0;
+  s21_decimal ten = {{10, 0, 0, 0}};
+  s21_decimal trash;
+  for (int i = 0; i <= exp - new_exp && error_mark == 0; i++) {
+    error_mark = div_lite(decim, ten, &decim, &trash);
+  }
+  *result_decimal = decim;
+  if (sign == 1) chang_sign(result_decimal);
+  return error_mark;
+}
+
+int swap_int(int* value1, int* value2) {
+  int tmp = *value1;
+  *value1 = *value2;
+  *value2 = tmp;
+  return tmp;
+}
