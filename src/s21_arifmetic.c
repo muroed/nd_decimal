@@ -6,18 +6,6 @@
 // https://russianblogs.com/article/568550142/
 
 
-// int add(int num1, int num2) {
-//     int res = 0, carry = 0;
-//     res = num1^num2;
-//     carry = (num1&num2) << 1;
-//     while (carry) {
-//         int tmp = res;
-//         res = res^carry;
-//         carry = (tmp&carry) << 1;
-//     }
-//     return res;
-// }
-
 // add without degree and sign
 int add_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal) {
   int error_mark = 0;
@@ -70,10 +58,6 @@ int  s21_add(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal
 
   return error_mark;
 }
-
-// int negtive(int n) {
-//     return add(~n, 1);
-// }
 
 s21_decimal negative_decimal(s21_decimal decim) {
   s21_decimal one = {{1, 0, 0, 0}};
@@ -130,45 +114,6 @@ int sub_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
   return error_mark;
 }
 
-// Удалить знаковый бит
-// int getSign(int n) {
-//     return n >> 31;
-// } 
-
-// // Находим абсолютное значение n
-// int positive(int n) {
-//     return (getSign(n) & 1) ? negtive(n) : n;
-// }
-
-// int multiply(int a, int b) {
-//     // Если двухзначные биты знака несовместимы, результат отрицательный
-//     bool isNegtive = false;
-//     if(getSign(a) ^ getSign(b))
-//         isNegtive = true;
-//     a = positive(a);
-//     b = positive(b);
-//     int res = 0;
-//     while (b | 0) {
-//         // Когда соответствующий бит b равен 1, нужно только добавить
-//         if(b & 1)
-//             res = add(res, a);
-//         a = a << 1; // сдвиг влево
-//         b = b >> 1; // б сдвиг вправо
-//     }
-//     return isNegtive == true ? negtive(res) : res;
-// }
-
-
-// int res = 0;
-//     while (b | 0) {
-//         // Когда соответствующий бит b равен 1, нужно только добавить
-//         if(b & 1)
-//             res = add(res, a);
-//         a = a << 1; // сдвиг влево
-//         b = b >> 1; // б сдвиг вправо
-//     }
-//     return isNegtive == true ? negtive(res) : res;
-// }
 int mul_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
   int error_mark = 0;
   s21_decimal zero = {{0, 0, 0, 0}};
@@ -199,38 +144,47 @@ int mul_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
   return error_mark;
 }
 
-// int divide(int a, int b) {
-//     // Делитель не может быть 0
-//     if (b == 0)
-//         throw std::runtime_error("Divided can't be zero...");
-
-//     bool isNegtive = false;
-//     if (getSign(a) ^ getSign(b))
-//         isNegtive = true;
-
-//     a = positive(a);
-//     b = positive(b);
-
-//     int res = 0;
-//     while (a >= b) {
-//         res = add(res, 1);
-//         a = subtraction(a, b);
-//     }
-//     return beNegtive == true ? negtive(res) : res;
-// }
-
-int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal, s21_decimal* remainder) {
-  int error_mark = 0;
-  s21_decimal one = {{1, 0, 0, 0}};
-  nullify_all_decimal(result_decimal);
-
-  while (s21_is_greater_or_equal(decim1, decim2) == 1) {
-    error_mark = add_lite(*result_decimal, one, result_decimal);
-    sub_lite(decim1, decim2, &decim1);
+int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
+  int status;
+  s21_decimal one;
+  s21_from_int_to_decimal(1, &one);
+  s21_decimal temp;
+  nullify_all_decimal(&temp);
+  *result = one;
+  if (s21_is_equal(decim1, decim2)) {
+    *result = one;
+  } else if (s21_is_less(decim1, decim2)) {
+    nullify_all_decimal(result);
+  } else {
+    s21_decimal divcopy = decim2;
+  
+    while(s21_is_greater(decim1, decim2) == 1) {
+      bit_swift_left(decim2, 1, &decim2);
+      bit_swift_left(*result, 1, result);
+    }
+    if (s21_is_less(decim1, decim2) == 1) {
+      decim2 = bit_swift_right(decim2, 1);
+      *result = bit_swift_right(*result, 1);
+    }
+    sub_lite(decim1, decim2, &temp);
+    status = div_lite(temp, divcopy, &one);
+    status = add_lite(*result, one, result);
   }
-    *remainder = decim1;
-  return error_mark;
+  return status;
 }
+
+// int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal, s21_decimal* remainder) {
+//   int error_mark = 0;
+//   s21_decimal one = {{1, 0, 0, 0}};
+//   nullify_all_decimal(result_decimal);
+
+//   while (s21_is_greater_or_equal(decim1, decim2) == 1 && error_mark == 0) {
+//     error_mark = add_lite(*result_decimal, one, result_decimal);
+//     sub_lite(decim1, decim2, &decim1);
+//   }
+//     *remainder = decim1;
+//   return error_mark;
+// }
 
 int div_exp(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
   int error_mark = 0;
@@ -242,7 +196,7 @@ int div_exp(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal)
 
 
   while (s21_is_not_equal(decim1, zero) && (exp_buffer=get_exp(*result_decimal)) < MAX_EXP && !error_mark) {
-    div_lite(decim1, decim2, &new_result, &remainder);
+    // div_lite(decim1, decim2, &new_result, &remainder);
     add_lite(*result_decimal, new_result, result_decimal);
     set_exp(result_decimal, exp_buffer);
     if (s21_is_not_equal(remainder, zero) == 1) {
@@ -275,7 +229,7 @@ int mod_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
   int error_mark = 0;
   nullify_all_decimal(result_decimal);
   s21_decimal null;
-  error_mark = div_lite(decim1, decim2, &null, result_decimal);
+  // error_mark = div_lite(decim1, decim2, &null, result_decimal);
   return error_mark;
 }
 
