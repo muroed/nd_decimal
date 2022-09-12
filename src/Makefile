@@ -1,47 +1,59 @@
-CC= gcc -std=c11 #-Wall -Wextra -Werror 
+CC= gcc -std=c11
+CFLAGS = -g #-Wall -Wextra -Werror
 LIBSOURCES= $(wildcard s21_*.c)
 LIBOBJECTS= $(LIBSOURCES:.c=.o)
-TEST_FLAGS  := --coverage -c -g
-CHECK_FLAGS := -lcheck
-LIN_FLAGS := -lpthread -pthread -lrt -lm -lsubunit
+GCOV_FLAGS := -fprofile-arcs --coverage
+CHECK_FLAGS := -lcheck -lgmp
+LIN_FLAGS := -lpthread -lcheck -pthread -L. -lrt -lm -lsubunit
 ifeq ($(shell uname), Linux)
 CHECK_FLAGS += $(LIN_FLAGS)
 endif
+SOURCES:= core.c s21_*.c
+OBJECTS := $(addprefix obj/,$(SOURCES:.c=.o))
+OBJECTS_GCOV := $(addprefix obj_gcov/,$(SOURCES:.c=.o))
 OBJ_DIR     := obj
-TEST_SRC_DIR:= tests_src
-TEST_OBJ_DIR:= tests_obj
-GCOV_OBJ_DIR:= gcov_res
+OBJ_GCOV_DIR:= obj_gcov
 CHECKMK_FILE:= asd.check
+HEADER:= s21_decimal.h decimal_core.h
 
 all: tests
-re: clean main
-tests: core.a test clean
 
-core.a: core.c $(LIBSOURCES)
-	$(CC) -c $^
-	ar rc libcore.a core.o $(LIBOBJECTS)
-	ranlib libcore.a
+create_dir:
+	mkdir -p $(OBJ_DIR) $(OBJ_GCOV_DIR)
 
-main: core.a main.c
-	$(CC) main.c -o a.out -L. -lcore
-	./a.out
+$(OBJ_DIR)/%.o: %.c $(HEADER)
+	$(CC) $(CFLAGS) -c $< -o $(subst /,_,$@) $(LIN_FLAGS)
+	mv *.o $(OBJ_DIR)/
 
-add_test: clean add_test.c
-	@$(CC) add_test.c -o add_test.out
-	@./add_test.out $(CHECKMK_FILE)
-	@make tests
+$(OBJ_GCOV_DIR)/%.o: %.c $(HEADER)
+	@$(CC) $(CFLAGS) $(GCOV_FLAGS) -c $< -o $(subst /,_,$@) $(LIN_FLAGS)
+	@mv *.o *gcno $(OBJ_GCOV_DIR)/
 
-test: $(LIBOBJECTS)
-#clean_mode=1
+s21_decimal.a: create_dir $(OBJECTS)
+	ar rcs $@ $(OBJ_DIR)/*.o
+
+lib_gcov.a: create_dir $(OBJECTS_GCOV)
+	ar rcs $@ $(OBJ_GCOV_DIR)/*.o
+
+decimal_tests.c:
 	@checkmk clean_mode=1 $(CHECKMK_FILE) > decimal_tests.c
-	@$(CC) decimal_tests.c $^ -L. -lcore $(CHECK_FLAGS) -o test_decimal.out
-	@./test_decimal.out
+
+test: decimal_tests.c $(HEADER) lib_gcov.a
+	$(CC) $(CFLAGS) $^ -o test_test $(LCHECK) $(LDFLAGS) $(GCOV_FLAGS)
+	./test_test
+	@mv *gcda *gcno $(OBJ_GCOV_DIR)
+
+gcov_report: test
+	@rm -f $(OBJ_GCOV_DIR)/*tests*
+	@lcov/bin/./lcov -c -d $(OBJ_GCOV_DIR)/. -o $(OBJ_GCOV_DIR)/coverage.info
+	@lcov/bin/./genhtml $(OBJ_GCOV_DIR)/coverage.info --output-directory out
 
 
 clean:
 	@rm -rf *.a
 	@rm -rf *.o
 	@rm -rf *.out
+	rm -rf $(OBJ_DIR) $(OBJ_GCOV_DIR)
 
 
 style:
