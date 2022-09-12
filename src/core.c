@@ -224,15 +224,21 @@ s21_decimal bit_or(s21_decimal decim1, s21_decimal decim2) {
 
 int truncate_to_exp(s21_decimal decim, int new_exp, s21_decimal* result_decimal) {
   int exp = get_exp(decim);
+  if (exp > 0)
+    set_exp(&decim, 0);
   int sign = check_sign(decim);
+  if (sign == 1)
+    chang_sign(&decim);
   int error_mark = 0;
   s21_decimal ten = {{10, 0, 0, 0}};
   s21_decimal trash;
-  for (int i = 0; i <= exp - new_exp && error_mark == 0; i++) {
-    error_mark = div_lite(decim, ten, &decim, &trash);
+  for (int i = exp; i > new_exp && error_mark == 0; i--) {
+    error_mark = div_lite(decim, ten, &decim);
+    // print_decimal_bin(decim);
   }
   *result_decimal = decim;
   if (sign == 1) chang_sign(result_decimal);
+  set_exp(&decim, exp);
   return error_mark;
 }
 
