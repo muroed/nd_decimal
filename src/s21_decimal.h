@@ -30,7 +30,7 @@ int sub_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
 s21_decimal negative_decimal(s21_decimal decim);
 int mul_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal);
 int mul_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
-int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal, s21_decimal* remainder);
+int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal);
 int div_exp(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal);
 int div_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal);
 int mod_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
@@ -44,6 +44,9 @@ int s21_div(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal)
 int s21_mod(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
 
 // another
-int s21_negative(s21_decimal decim, s21_decimal *result_decimal);
+int s21_negate(s21_decimal decim, s21_decimal *result_decimal);
+int s21_truncate(s21_decimal decim, s21_decimal *result_decimal);
+int s21_round(s21_decimal decim, s21_decimal *result_decimal);
+int s21_floor(s21_decimal decim, s21_decimal *result_decimal);
 
 #endif  //  SRC_S21_DECIMAL_H_
