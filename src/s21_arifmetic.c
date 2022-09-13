@@ -30,14 +30,14 @@ int add_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
   int sign_decim2 = check_sign(decim2);
 
   if (sign_decim1 == 1 && sign_decim2 == 1) {
-    chang_sign(result_decimal);
     error_mark = add_lite(decim1, decim2, result_decimal);
+    chang_sign(result_decimal);
   } else if (sign_decim1 == 1) {
-    chang_sign(&decim1);
     error_mark = sub_lite(decim2, decim1, result_decimal);
+    chang_sign(&decim1);
   } else if (sign_decim2 == 1) {
-    chang_sign(&decim2);
     error_mark = sub_lite(decim1, decim2, result_decimal);
+    chang_sign(&decim2);
   } else {
     error_mark = add_lite(decim1, decim2, result_decimal);
   }
@@ -196,7 +196,7 @@ int div_exp(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal)
 
 
   while (s21_is_not_equal(decim1, zero) && (exp_buffer=get_exp(*result_decimal)) < MAX_EXP && !error_mark) {
-    // div_lite(decim1, decim2, &new_result, &remainder);
+    div_lite(decim1, decim2, &new_result);
     add_lite(*result_decimal, new_result, result_decimal);
     set_exp(result_decimal, exp_buffer);
     if (s21_is_not_equal(remainder, zero) == 1) {
