@@ -234,7 +234,6 @@ int truncate_to_exp(s21_decimal decim, int new_exp, s21_decimal* result_decimal)
   s21_decimal trash;
   for (int i = exp; i > new_exp && error_mark == 0; i--) {
     error_mark = div_lite(decim, ten, &decim);
-    // print_decimal_bin(decim);
   }
   *result_decimal = decim;
   if (sign == 1) chang_sign(result_decimal);
