@@ -225,22 +225,86 @@ int div_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal
   return error_mark;
 }
 
-int mod_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal) {
+int int_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
   int error_mark = 0;
-  nullify_all_decimal(result_decimal);
-  s21_decimal null;
-  // error_mark = div_lite(decim1, decim2, &null, result_decimal);
+
+  if (is_null_decimal(value_2)) {
+    error_mark = 4;
+  } else {
+    s21_from_int_to_decimal(1, result);
+
+    int sign = check_sign(value_1) ^ check_sign(value_2);
+    set_sign(&value_1, 0);
+    set_sign(&value_2, 0);
+
+    int res_exp = get_exp(value_1) - get_exp(value_2);
+    set_exp(&value_1, 0);
+    set_exp(&value_2, 0);
+
+    error_mark = div_lite(value_1, value_2, result);
+    if (res_exp < 0) {
+      error_mark = shifting(result, -res_exp);
+      error_mark += -res_exp << 2;
+
+      res_exp = 0;
+    }
+    set_exp(result, res_exp);
+    set_sign(result, sign);
+  }
+
   return error_mark;
 }
 
-int mod_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
-  int error_mark = 0;
+// int mod_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal) {
+//   int error_mark = 0;
+//   nullify_all_decimal(result_decimal);
+//   s21_decimal null;
+//   // error_mark = div_lite(decim1, decim2, &null, result_decimal);
+//   return error_mark;
+// }
+s21_decimal mod_lite(s21_decimal value_1, s21_decimal value_2) {
+  s21_decimal divcopy = value_2;
+  s21_decimal res;
+  s21_decimal temp = {{0, 0, 0, 0}};
+  if (s21_is_equal(value_1, value_2))
+    return temp;
+  else if (s21_is_less(value_1, value_2))
+    return value_1;
 
-  if (check_sign(decim1) == 1) {
-    error_mark = mod_lite(decim1, decim2, result_decimal);
-    chang_sign(result_decimal);
-  } else {
-    error_mark = mod_lite(decim1, decim2, result_decimal);
+  while ((s21_is_less(value_2, value_1) || s21_is_equal(value_2, value_1)) &&
+         !check_sign(value_2)) {
+    bit_swift_left(value_2, 1, &value_2);
   }
-  return error_mark;
+  if (s21_is_less(value_1, value_2)) {
+    value_2 = bit_swift_right(value_2, 1);
+  }
+  sub_lite(value_1, value_2, &temp);
+  res = mod_lite(temp, divcopy);
+  return res;
+}
+
+// int mod_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
+//   int error_mark = 0;
+
+//   if (check_sign(decim1) == 1) {
+//     error_mark = mod_lite(decim1, decim2, result_decimal);
+//     chang_sign(result_decimal);
+//   } else {
+//     error_mark = mod_lite(decim1, decim2, result_decimal);
+//   }
+//   return error_mark;
+// }
+int mod_sign(s21_decimal value_1, s21_decimal value_2, s21_decimal* result) {
+  if (is_null_decimal(value_2))
+    return 3;
+  nullify_all_decimal(result);
+  int sign = check_sign(value_1);
+  if (sign == 1)
+    chang_sign(&value_1);
+  if (check_sign(value_2) == 1)
+    chang_sign(&value_2);
+  *result = mod_lite(value_1, value_2);
+  if (check_sign(*result) != sign)
+    chang_sign(result);
+  return 0;
 }
