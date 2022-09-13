@@ -35,6 +35,7 @@ int get_bits(s21_decimal decim, int gbit);
 int get_bit(int bits, int bit);
 int check_sign(s21_decimal decim);
 int chang_sign(s21_decimal* decim);
+int set_sign(s21_decimal *decim, int sign);
 s21_decimal nullify_all_decimal(s21_decimal *decim);
 int is_null_decimal(s21_decimal decim);
 int set_bit(int bits, int bit, int new_bit);
@@ -53,5 +54,10 @@ s21_decimal bit_exclusive_or(s21_decimal decim1, s21_decimal decim2);
 s21_decimal bit_and(s21_decimal decim1, s21_decimal decim2);
 s21_decimal bit_negative(s21_decimal decim);
 s21_decimal bit_or(s21_decimal decim1, s21_decimal decim2);
+
+int bank_round(s21_decimal *number, int n);
+int bank_rounding(int a);
+int balancing(s21_decimal *a, s21_decimal *b);
+int shifting(s21_decimal *a, int n);
 
 #endif  //  SRC_DECIMAL_CORE_H_

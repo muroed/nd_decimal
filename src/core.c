@@ -34,6 +34,11 @@ int chang_sign(s21_decimal *decim) {
     decim->bits[INFO_BIT] = bit_on(decim->bits[INFO_BIT], SIGN_BIT);
   return check_sign(*decim);
 }
+
+int set_sign(s21_decimal *decim, int sign) {
+  decim->bits[INFO_BIT] = set_bit(decim->bits[INFO_BIT], SIGN_BIT, sign);
+  return check_sign(*decim);
+}
 //  Зануление всего decimal
 s21_decimal nullify_all_decimal(s21_decimal *decim) {
   for (int i = 0; i < BITS; i++)
