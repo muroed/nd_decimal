@@ -10,7 +10,7 @@ ifeq ($(shell uname), Linux)
 CHECK_FLAGS += $(LIN_FLAGS)
 endif
 
-SOURCES:= core.c s21_another.c s21_arifmetic.c s21_comparison.c s21_converts.c s21_from_decimal_to_int.c
+SOURCES:= balancing.c core.c s21_another.c s21_arifmetic.c s21_comparison.c s21_converts.c s21_from_decimal_to_int.c 
 
 OBJECTS := $(addprefix obj/,$(SOURCES:.c=.o))
 OBJECTS_GCOV := $(addprefix obj_gcov/,$(SOURCES:.c=.o))
@@ -39,7 +39,7 @@ libgcov.a: create_dir $(OBJECTS_GCOV)
 	ar rcs libgcov.a $(OBJ_GCOV_DIR)/*.o
 
 decimal_tests.c:
-	@checkmk clean_mode=1 $(CHECKMK_FILE) > decimal_tests.c
+	@checkmk clean_mode=0 $(CHECKMK_FILE) > decimal_tests.c
 
 test: decimal_tests.c $(HEADER) libgcov.a
 # echo "TYT"
@@ -56,6 +56,7 @@ gcov_report: test
 clean:
 	@rm -rf *.a *.gcda *.gcno *.o *.out
 	rm -rf $(OBJ_DIR) $(OBJ_GCOV_DIR) out
+	rm -rf decimal_tests.c
 
 
 style:
