@@ -2,13 +2,16 @@ CC= gcc -std=c11
 CFLAGS = -g #-Wall -Wextra -Werror
 LIBSOURCES= $(wildcard s21_*.c)
 LIBOBJECTS= $(LIBSOURCES:.c=.o)
-GCOV_FLAGS := -fprofile-arcs --coverage
-CHECK_FLAGS := -lcheck -lgmp
-LIN_FLAGS := -lpthread -lcheck -pthread -L. -lrt -lm -lsubunit
+GCOV_FLAGS := -fprofile-arcs -ftest-coverage
+LDFLAGS := -fprofile-arcs --coverage
+LCHECK := -lcheck -lgmp
+LIN_FLAGS := -lpthread -lcheck -pthread -lrt -lm -lsubunit
 ifeq ($(shell uname), Linux)
 CHECK_FLAGS += $(LIN_FLAGS)
 endif
-SOURCES:= core.c s21_*.c
+
+SOURCES:= core.c s21_another.c s21_arifmetic.c s21_comparison.c s21_converts.c s21_from_decimal_to_int.c
+
 OBJECTS := $(addprefix obj/,$(SOURCES:.c=.o))
 OBJECTS_GCOV := $(addprefix obj_gcov/,$(SOURCES:.c=.o))
 OBJ_DIR     := obj
@@ -16,7 +19,7 @@ OBJ_GCOV_DIR:= obj_gcov
 CHECKMK_FILE:= asd.check
 HEADER:= s21_decimal.h decimal_core.h
 
-all: tests
+all: clean gcov_report
 
 create_dir:
 	mkdir -p $(OBJ_DIR) $(OBJ_GCOV_DIR)
@@ -30,18 +33,19 @@ $(OBJ_GCOV_DIR)/%.o: %.c $(HEADER)
 	@mv *.o *gcno $(OBJ_GCOV_DIR)/
 
 s21_decimal.a: create_dir $(OBJECTS)
-	ar rcs $@ $(OBJ_DIR)/*.o
+	ar rc libdecimal.a $(OBJ_DIR)/*.o
 
-lib_gcov.a: create_dir $(OBJECTS_GCOV)
-	ar rcs $@ $(OBJ_GCOV_DIR)/*.o
+libgcov.a: create_dir $(OBJECTS_GCOV)
+	ar rcs libgcov.a $(OBJ_GCOV_DIR)/*.o
 
 decimal_tests.c:
 	@checkmk clean_mode=1 $(CHECKMK_FILE) > decimal_tests.c
 
-test: decimal_tests.c $(HEADER) lib_gcov.a
-	$(CC) $(CFLAGS) $^ -o test_test $(LCHECK) $(LDFLAGS) $(GCOV_FLAGS)
-	./test_test
-	@mv *gcda *gcno $(OBJ_GCOV_DIR)
+test: decimal_tests.c $(HEADER) libgcov.a
+# echo "TYT"
+	$(CC) $(CFLAGS) $^ -o test_test.out $(LCHECK) $(LDFLAGS) $(GCOV_FLAGS)
+	./test_test.out
+	@mv *.gcda *.gcno $(OBJ_GCOV_DIR)
 
 gcov_report: test
 	@rm -f $(OBJ_GCOV_DIR)/*tests*
@@ -50,10 +54,8 @@ gcov_report: test
 
 
 clean:
-	@rm -rf *.a
-	@rm -rf *.o
-	@rm -rf *.out
-	rm -rf $(OBJ_DIR) $(OBJ_GCOV_DIR)
+	@rm -rf *.a *.gcda *.gcno *.o *.out
+	rm -rf $(OBJ_DIR) $(OBJ_GCOV_DIR) out
 
 
 style:
