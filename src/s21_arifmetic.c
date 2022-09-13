@@ -46,15 +46,11 @@ int add_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
 
 int  s21_add(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
   int error_mark = 0;
-  int exp_decim1 = get_exp(decim1);
-  int exp_decim2 = get_exp(decim2);
-
-  if (exp_decim1 < exp_decim2) swap_int(&exp_decim1, &exp_decim2);
-
-  error_mark = truncate_to_exp(decim1, exp_decim1 - exp_decim2, &decim1);
-  if (error_mark == 0) error_mark = truncate_to_exp(decim2, exp_decim1 - exp_decim2, &decim2);
-
+  nullify_all_decimal(result_decimal);
+  balancing(&decim1, &decim2);
+  int exp = get_exp(decim1);
   if (error_mark == 0) error_mark = add_sign(decim1, decim2, result_decimal);
+  set_exp(result_decimal, exp);
 
   return error_mark;
 }
@@ -65,8 +61,8 @@ s21_decimal negative_decimal(s21_decimal decim) {
   return decim;
 }
 // ПРОВЕРИТЬ НОМЕРА ОШИБОК!!!
-int sub_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal) {
-  return !add_lite(decim1, negative_decimal(decim2), result_decimal);
+int sub_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
+  return !add_lite(negative_decimal(decim1), decim2, result_decimal);
 }
 /*
  1 - 2
@@ -89,7 +85,7 @@ int sub_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
   int error_mark = 0;
   int sign_decim1 = check_sign(decim1);
   int sign_decim2 = check_sign(decim2);
-  int priority = s21_is_greater(decim1, decim2);
+  int priority = s21_is_greater_or_equal(decim1, decim2);
 
   if (sign_decim1 == 1 && sign_decim2 == 1) {
     if (priority == 1) {
@@ -111,6 +107,16 @@ int sub_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
       chang_sign(result_decimal);
     }
   }
+  return error_mark;
+}
+
+int s21_sub(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
+  int error_mark = 0;
+  nullify_all_decimal(result_decimal);
+  balancing(&decim1, &decim2);
+  int exp = get_exp(decim1);
+  error_mark = sub_sign(decim1, decim2, result_decimal);
+  set_exp(result_decimal, exp);
   return error_mark;
 }
 
