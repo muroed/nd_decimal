@@ -21,6 +21,10 @@ int s21_is_less(s21_decimal decim1, s21_decimal decim2) {
   int bit1, bit2;
   if (get_exp(decim1) < get_exp(decim2))
     res_less = 1;
+  else if (check_sign(decim1) == 1 && check_sign(decim2) == 0)
+    res_less = 1;
+  else if (check_sign(decim1) == 0 && check_sign(decim2) == 1)
+    res_less = 0;
   else
     for (int bit = ALL_BIT - BITS_IN_INT - 1; bit >= 0; bit--) {
       if ((bit1 = get_global_bit(decim1, bit)) ^
