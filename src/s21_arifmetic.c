@@ -62,29 +62,25 @@ s21_decimal negative_decimal(s21_decimal decim) {
 }
 // ПРОВЕРИТЬ НОМЕРА ОШИБОК!!!
 int sub_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
-  return sub_simple(decim1, decim2, result_decimal);
-}
-
-int sub_simple(s21_decimal value_1, s21_decimal value_2, s21_decimal* result) {
-    int error_mark = 0;
-    nullify_all_decimal(result);
+  int error_mark = 0;
+    nullify_all_decimal(result_decimal);
     for (int i = 0; i < 96; i++) {
-        int bit_value_1 = get_global_bit(value_1, i);
-        int bit_value_2 = get_global_bit(value_2, i);
-        if (bit_value_1 ^ bit_value_2) {
-            set_global_bit(result, i, 1);
+        int bit_decim1 = get_global_bit(decim1, i);
+        int bit_decim2 = get_global_bit(decim2, i);
+        if (bit_decim1 ^ bit_decim2) {
+            set_global_bit(result_decimal, i, 1);
         }
-        if (!bit_value_1 && bit_value_2) {
+        if (!bit_decim1 && bit_decim2) {
             int k = i + 1;
-            while ((bit_value_1 = !get_global_bit(value_1, k)) && k < 96) {
-              set_global_bit(&value_1, k, 1);
+            while ((bit_decim1 = !get_global_bit(decim1, k)) && k < 96) {
+              set_global_bit(&decim1, k, 1);
               k++;
             }
             if (k == 96) {
                 error_mark = 1;
-                nullify_all_decimal(result);
+                nullify_all_decimal(result_decimal);
             }
-            set_global_bit(&value_1, k, 0);
+            set_global_bit(&decim1, k, 0);
         }
     }
     return error_mark;
