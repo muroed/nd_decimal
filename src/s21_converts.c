@@ -25,22 +25,57 @@ int s21_from_int_to_decimal(int src_int, s21_decimal *dst_decimal) {
 // }
 
 
+int s21_from_decimal_to_int(s21_decimal src, int *dst) {
+    int error_mark = 0;
+    if (!dst) {
+        error_mark = 1;
+    } else {
+        int scale = get_exp(src), sign;
+        sign = (check_sign(src)) ? -1 : 1;
+        s21_decimal ten;
+        s21_from_int_to_decimal(10, &ten);
+        while (scale > 0) {
+            div_lite(src, ten, &src);
+            scale--;
+        }
+        set_global_bit(&src, 31, 0);
+        *dst = src.bits[0];
+        *dst *= sign;
+    }
+    return error_mark;
+}
+
 // int s21_from_decimal_to_int(s21_decimal src, int *dst) {
-//     int error_mark = 0;
+//     int result = 0;
+//     int ten_pow = get_exp(src);
 //     if (!dst) {
-//         error_mark = 1;
+//         result = 1;
+//     } else if (ten_pow > 28) {
+//         *dst = 0;
+//         result = 1;
 //     } else {
-//         int scale = get_scale(src), sign;
-//         sign = (get_sign(src)) ? -1 : 1;
-//         s21_decimal ten;
-//         s21_from_int_to_decimal(10, &ten);
-//         while (scale > 0) {
-//             div_simple(src, ten, &src);
-//             scale--;
+//         s21_truncate(src, &src);
+
+//         for (int i = 1; i < 3; i++) {
+//             for (int j = 0; j < 16; j++) {
+//                 if (get_bit(src.bits[i], j) == 1) {
+//                     result = 1;
+//                     break;
+//                 }
+//             }
+//             if (result == 1) {
+//                 break;
+//             }
 //         }
-//         set_bit_zero(&src, 31);
-//         *dst = src.bits[0];
-//         *dst *= sign;
+
+//         if (result == 0) {
+//             if (check_sign(src) == 1)
+//                 *dst = 0 - src.bits[0];
+//             else
+//                 *dst = src.bits[0];
+//             if (*dst) *dst = set_bit(*dst, 31, check_sign(src));
+
+//         }
 //     }
-//     return error_mark;
+//     return result;
 // }
