@@ -62,8 +62,34 @@ s21_decimal negative_decimal(s21_decimal decim) {
 }
 // ПРОВЕРИТЬ НОМЕРА ОШИБОК!!!
 int sub_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal) {
-  return !add_lite(negative_decimal(decim1), decim2, result_decimal);
+  return sub_simple(decim1, decim2, result_decimal);
 }
+
+int sub_simple(s21_decimal value_1, s21_decimal value_2, s21_decimal* result) {
+    int error_mark = 0;
+    nullify_all_decimal(result);
+    for (int i = 0; i < 96; i++) {
+        int bit_value_1 = get_global_bit(value_1, i);
+        int bit_value_2 = get_global_bit(value_2, i);
+        if (bit_value_1 ^ bit_value_2) {
+            set_global_bit(result, i, 1);
+        }
+        if (!bit_value_1 && bit_value_2) {
+            int k = i + 1;
+            while ((bit_value_1 = !get_global_bit(value_1, k)) && k < 96) {
+              set_global_bit(&value_1, k, 1);
+              k++;
+            }
+            if (k == 96) {
+                error_mark = 1;
+                nullify_all_decimal(result);
+            }
+            set_global_bit(&value_1, k, 0);
+        }
+    }
+    return error_mark;
+}
+
 /*
  1 - 2
 '+' '+'
@@ -151,24 +177,24 @@ int mul_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal
 }
 
 int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
-  int status;
+  int status = 0;
   s21_decimal one;
   s21_from_int_to_decimal(1, &one);
   s21_decimal temp;
   nullify_all_decimal(&temp);
   *result = one;
-  if (s21_is_equal(decim1, decim2)) {
+  if (is_equal_lite(decim1, decim2)) {
     *result = one;
-  } else if (s21_is_less(decim1, decim2)) {
+  } else if (is_less_lite(decim1, decim2)) {
     nullify_all_decimal(result);
   } else {
     s21_decimal divcopy = decim2;
   
-    while(s21_is_greater(decim1, decim2) == 1) {
+    while(is_greater_lite(decim1, decim2) == 1) {
       bit_swift_left(decim2, 1, &decim2);
       bit_swift_left(*result, 1, result);
     }
-    if (s21_is_less(decim1, decim2) == 1) {
+    if (is_less_lite(decim1, decim2) == 1) {
       decim2 = bit_swift_right(decim2, 1);
       *result = bit_swift_right(*result, 1);
     }
@@ -277,7 +303,7 @@ s21_decimal mod_lite(s21_decimal value_1, s21_decimal value_2) {
   else if (s21_is_less(value_1, value_2))
     return value_1;
 
-  while ((s21_is_less(value_2, value_1) || s21_is_equal(value_2, value_1)) &&
+  while ((is_less_lite(value_2, value_1) || is_equal_lite(value_2, value_1)) &&
          !check_sign(value_2)) {
     bit_swift_left(value_2, 1, &value_2);
   }

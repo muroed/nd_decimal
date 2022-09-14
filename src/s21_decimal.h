@@ -8,6 +8,11 @@ typedef struct {
 } s21_decimal;
 
 
+//  comparison help
+int is_less_lite(s21_decimal decim1, s21_decimal decim2);
+int is_less_or_equal_lite(s21_decimal decim1, s21_decimal decim2);
+int is_greater_lite(s21_decimal decim1, s21_decimal decim2);
+int is_equal_lite(s21_decimal decim1, s21_decimal decim2);
 //  comparison
 int s21_is_equal(s21_decimal decim1, s21_decimal decim2);
 int s21_is_not_equal(s21_decimal decim1, s21_decimal decim2);
@@ -26,6 +31,7 @@ int s21_from_decimal_to_float(s21_decimal src_decimal, float *dst_float);
 int add_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
 int add_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
 int sub_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
+int sub_simple(s21_decimal value_1, s21_decimal value_2, s21_decimal* result);
 int sub_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal *result_decimal);
 s21_decimal negative_decimal(s21_decimal decim);
 int mul_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result_decimal);

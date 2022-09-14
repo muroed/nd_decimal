@@ -67,7 +67,9 @@ int bank_round(s21_decimal *number, int n) {
     set_exp(number, exp);
 
     if (bank_rounding(mod_res.bits[0])) {
+      int buf = number->bits[INFO_BIT];
       add_lite(*number, one, number);
+      number->bits[INFO_BIT] = buf;
     }
   }
 
