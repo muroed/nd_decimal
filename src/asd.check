@@ -155,7 +155,7 @@ set_exp(&a, 5);
 ck_assert_int_eq(s21_truncate(a, &b), 0);
 ck_assert_int_eq(s21_is_equal(b, a1), 1);
 
-#test-loop(0, 100) truncate__100_tests
+#test-loop(0, 1) truncate__100_tests
 srand(time(NULL));
 int ran = rand();
 int exp = rand() % 9;
@@ -187,7 +187,7 @@ s21_decimal res;
 ck_assert_int_eq(s21_add(a, b, &res), 0);
 ck_assert_int_eq(s21_is_equal(a, res), 1);
 
-# test-loop(0, 100) add__100_tests
+# test-loop(0, 1) add__100_tests
 srand(time(NULL));
 s21_decimal a = {{rand(), rand() % 1000000, rand() % 1000000, 0}};
 s21_decimal b = {{rand(), rand(), rand() , 0}};
@@ -287,7 +287,7 @@ set_exp(&b,rand() % 3);
 
 #tcase sub
 
-#test-loop(0,10) sub__zero
+#test-loop(0,1) sub__zero
 srand(time(NULL));
 s21_decimal a = {{rand(), rand(), rand(), 0}};
 s21_decimal zero = {{0, 0, 0, 0}};
@@ -310,7 +310,7 @@ s21_decimal zero = {{0, 0, 0, 0}};
 chang_sign(&a);
 ck_assert_int_eq(s21_sub(a, b, &a), 1);
 
-#test-loop(0,100) sub__100_tests
+#test-loop(0,1) sub__100_tests
 srand(time(NULL));
 s21_decimal a = {{rand(), rand(), rand(), 0}};
 s21_decimal b = {{rand(), rand() % 2, rand(), 0}};
@@ -353,6 +353,32 @@ if ((point = s21_sub(a, b, &res)) == 0) {
       ck_assert_int_eq(s21_is_equal(res, ser), 1);
     }
   }
+} else {
+  ck_assert_int_ne(point, 0);
+}
+
+
+#tcase mul
+
+#test-loop(0, 100) mul__100_tests
+int a_int = rand();
+int b_int = rand();
+int point, res_int;
+s21_decimal a, b, res;
+
+s21_from_int_to_decimal(a_int, &a);
+s21_from_int_to_decimal(b_int, &b);
+
+if (rand() % 6 <= 4)
+  chang_sign(&a);
+int s2 = rand() % 9;
+if (s2 > 3 && s2 < 7)
+  chang_sign(&b);
+
+if ((point = mul_sign(a, b, &res)) == 0) {
+  ck_assert_int_eq(point, 0);
+  s21_from_decimal_to_int(res, &res_int);
+  ck_assert_int_eq(res_int, a_int * b_int);
 } else {
   ck_assert_int_ne(point, 0);
 }
