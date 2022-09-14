@@ -22,6 +22,9 @@ int get_bits(s21_decimal decim, int gbit) {
 int get_global_bit(s21_decimal decim, int gbit) {
   return get_bit(get_bits(decim, gbit), gbit);
 }
+int set_global_bit(s21_decimal* decim, int gbit, int new_bit) {
+  return decim->bits[(gbit % ALL_BIT) / BITS_IN_INT] = set_bit(get_bits(*decim, gbit), gbit, new_bit);
+}
 //  возвращает знак 1 '-'; 0 '+'
 int check_sign(s21_decimal decim) {
   return get_bit(decim.bits[INFO_BIT], SIGN_BIT);
@@ -105,11 +108,8 @@ void print_decimal_bin(s21_decimal decim) {
   printf("\n");
 }
 
-void print_int_bin(int int_number) {
-  printf("\n__INT__\n");
-  s21_decimal test = {{int_number, int_number, int_number, 0}};
-  print_decimal_bin(test);
-  printf("\n");
+void print_decimal_int(s21_decimal decim) {
+  printf("{{%d, %d, %d, %d}};\n", decim.bits[0], decim.bits[1], decim.bits[2], decim.bits[3]);
 }
 
 /*
@@ -240,11 +240,26 @@ int truncate_to_exp(s21_decimal decim, int new_exp, s21_decimal* result_decimal)
   for (int i = exp; i > new_exp && error_mark == 0; i--) {
     error_mark = div_lite(decim, ten, &decim);
   }
-  *result_decimal = decim;
+  *result_decimal = decim;  
   if (sign == 1) chang_sign(result_decimal);
   set_exp(&decim, exp);
   return error_mark;
 }
+
+// int s21_truncate(s21_decimal value, s21_decimal *result) {
+//     int error_mark = 0;
+//     int sign = check_sign(value);
+//     int scale = get_exp(value);
+//     s21_decimal ten = {0};
+//     *result = value;
+//     s21_from_int_to_decimal(10, &ten);
+//     while (scale != 0) {
+//         error_mark = get_sign(div_simple(*result, ten, result));
+//         scale--;
+//     }
+//     set_sign(result, sign);
+//     return error_mark;
+// }
 
 int swap_int(int* value1, int* value2) {
   int tmp = *value1;

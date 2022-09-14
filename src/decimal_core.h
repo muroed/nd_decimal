@@ -31,6 +31,7 @@ int bit_off(int bits, int bit);
 int bit_swap(int bits, int bit);
 int bit_is(int bits, int bit);
 int get_global_bit(s21_decimal decim, int gbit);
+int set_global_bit(s21_decimal* decim, int gbit, int new_bit);
 int get_bits(s21_decimal decim, int gbit);
 int get_bit(int bits, int bit);
 int check_sign(s21_decimal decim);
@@ -41,7 +42,7 @@ int is_null_decimal(s21_decimal decim);
 int set_bit(int bits, int bit, int new_bit);
 // for debug
 void print_decimal_bin(s21_decimal decim);
-void print_int_bin(int int_number);
+void print_decimal_int(s21_decimal decimal_int);
 int get_exp(s21_decimal decim);
 int set_exp(s21_decimal* decim, int new_exp);
 int swap_int(int* value1, int* value2);
