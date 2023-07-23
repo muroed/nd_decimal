@@ -1,6 +1,6 @@
-#include "s21_decimal.h"
+#include "nd_decimal.h"
 
-int s21_from_int_to_decimal(int src_int, s21_decimal *dst_decimal) {
+int nd_from_int_to_decimal(int src_int, nd_decimal *dst_decimal) {
   int error_mark = 0;
   if (!dst_decimal)
     return 1;
@@ -15,7 +15,7 @@ int s21_from_int_to_decimal(int src_int, s21_decimal *dst_decimal) {
   return error_mark;
 }
 
-int s21_from_decimal_to_int(s21_decimal src, int *dst) {
+int nd_from_decimal_to_int(nd_decimal src, int *dst) {
   int result = 0;
   int ten_pow = get_exp(src);
   if (!dst) {
@@ -24,7 +24,7 @@ int s21_from_decimal_to_int(s21_decimal src, int *dst) {
     *dst = 0;
     result = 1;
   } else {
-    s21_truncate(src, &src);
+    nd_truncate(src, &src);
 
     for (int i = 1; i < 3; i++) {
       for (int j = 0; j < 16; j++) {
@@ -52,7 +52,7 @@ int s21_from_decimal_to_int(s21_decimal src, int *dst) {
 // 0 - Ок
 // 1 - Ошибка
 
-int s21_from_float_to_decimal(float src, s21_decimal *dst) {
+int nd_from_float_to_decimal(float src, nd_decimal *dst) {
   int error_mark = 0;
   float mark = src;
   if (!dst) {
@@ -65,13 +65,13 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
     }
   } else if (isinf(mark) || isnan(mark)) {
     error_mark = 1;
-    *dst = s21_decimal_get_inf();
+    *dst = nd_decimal_get_inf();
     if (signbit(src) != 0) {
       set_sign(dst, 0);
     }
   } else if (fabsf(src) > MAX_FLOAT_TO_CONVERT) {
     error_mark = 1;
-    *dst = s21_decimal_get_inf();
+    *dst = nd_decimal_get_inf();
     if (signbit(src) != 0) {
       set_sign(dst, 0);
     }
@@ -80,13 +80,13 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
     *dst = nullify_all_decimal(dst);
   } else {
     *dst = nullify_all_decimal(dst);
-    s21_decimal results;
+    nd_decimal results;
     char flt[64];
     // Приводим float в научную запись - одна цифра до запятой и 6 цифр после
     // запятой В итоге мы получаем 7 значащих цифр, которые нам и нужно
     // перевести по заданию из float в decimal
     sprintf(flt, "%.7E", fabsf(src));
-    int exp = s21_get_float_exp_from_string(flt);
+    int exp = nd_get_float_exp_from_string(flt);
 
     if (exp <= -23) {
       // Если степень слишком маленькая, то не все значащие цифры поместятся в
@@ -97,7 +97,7 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
     }
 
     // Переводим строку с научной нотацией в decimal
-    results = s21_float_string_to_decimal(flt);
+    results = nd_float_string_to_decimal(flt);
 
     if (signbit(src) != 0) {
       set_sign(&results, 0);
@@ -111,7 +111,7 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
   return error_mark;
 }
 
-int s21_from_decimal_to_float(s21_decimal src, float *dst) {
+int nd_from_decimal_to_float(nd_decimal src, float *dst) {
   int return_code = OK;
 
   if (!dst) {

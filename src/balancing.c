@@ -1,11 +1,11 @@
 #include "decimal_core.h"
-#include "s21_decimal.h"
+#include "nd_decimal.h"
 
-int shifting(s21_decimal *a, int n) {
+int shifting(nd_decimal *a, int n) {
   /// Multiply the number by 10 and increase the exponent by 1 thereby shifting
   /// the number to the left
-  s21_decimal ten = {{10, 0, 0, 0}};
-  s21_decimal tmp_result;
+  nd_decimal ten = {{10, 0, 0, 0}};
+  nd_decimal tmp_result;
   nullify_all_decimal(&tmp_result);
 
   int exp = get_exp(*a);
@@ -24,7 +24,7 @@ int shifting(s21_decimal *a, int n) {
   return status;
 }
 
-int balancing(s21_decimal *a, s21_decimal *b) {
+int balancing(nd_decimal *a, nd_decimal *b) {
   int diff = get_exp(*a) - get_exp(*b);
 
   if (diff) {
@@ -50,14 +50,14 @@ int bank_rounding(int a) {
   return (a % 10 >= 5 || (a % 10 == 5 && (a / 10) % 2));
 }
 
-int bank_round(s21_decimal *number, int n) {
-  s21_decimal one, ten, hund;
-  s21_from_int_to_decimal(1, &one);
-  s21_from_int_to_decimal(10, &ten);
-  s21_from_int_to_decimal(100, &hund);
+int bank_round(nd_decimal *number, int n) {
+  nd_decimal one, ten, hund;
+  nd_from_int_to_decimal(1, &one);
+  nd_from_int_to_decimal(10, &ten);
+  nd_from_int_to_decimal(100, &hund);
 
   while (n--) {
-    s21_decimal mod_res;
+    nd_decimal mod_res;
     nullify_all_decimal(&mod_res);
     mod_sign(*number, hund, &mod_res);
 

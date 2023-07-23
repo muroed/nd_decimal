@@ -3,7 +3,7 @@
 
 typedef struct {
   int bits[4];
-} s21_decimal;
+} nd_decimal;
 
 #include <math.h>
 #include <stdio.h>
@@ -23,7 +23,7 @@ typedef struct {
 #define ERR 1
 #define MAX_EXP 28
 #define NEG_INF -1.0 / 0.0
-#define S21_NAN 0.0 / 0.0
+#define nd_NAN 0.0 / 0.0
 
 #define COLOR_HEADER "\033[95m"
 #define COLOR_BLUE "\033[94m"
@@ -35,56 +35,56 @@ typedef struct {
 #define MAX_FLOAT_TO_CONVERT 79228157791897854723898736640.0f
 #define MIN_FLOAT_TO_CONVERT \
   0.00000000000000000000000000010000000031710768509710513471352647538147514756461109f
-#define S21_MAX_UINT 4294967295
+#define nd_MAX_UINT 4294967295
 
 int bit_on(int bits, int bit);
 int bit_off(int bits, int bit);
 int bit_swap(int bits, int bit);
 int bit_is(int bits, int bit);
-int get_global_bit(s21_decimal decim, int gbit);
-int set_global_bit(s21_decimal *decim, int gbit, int new_bit);
-int get_bits(s21_decimal decim, int gbit);
+int get_global_bit(nd_decimal decim, int gbit);
+int set_global_bit(nd_decimal *decim, int gbit, int new_bit);
+int get_bits(nd_decimal decim, int gbit);
 int get_bit(int bits, int bit);
-int check_sign(s21_decimal decim);
-int chang_sign(s21_decimal *decim);
-int set_sign(s21_decimal *decim, int sign);
-s21_decimal nullify_all_decimal(s21_decimal *decim);
-int is_null_decimal(s21_decimal decim);
-int is_null_decimal_bin(s21_decimal decim);
+int check_sign(nd_decimal decim);
+int chang_sign(nd_decimal *decim);
+int set_sign(nd_decimal *decim, int sign);
+nd_decimal nullify_all_decimal(nd_decimal *decim);
+int is_null_decimal(nd_decimal decim);
+int is_null_decimal_bin(nd_decimal decim);
 int set_bit(int bits, int bit, int new_bit);
 // for debug
-void print_decimal_bin(s21_decimal decim);
-void print_decimal_int(s21_decimal decimal_int);
-int get_exp(s21_decimal decim);
-int set_exp(s21_decimal *decim, int new_exp);
+void print_decimal_bin(nd_decimal decim);
+void print_decimal_int(nd_decimal decimal_int);
+int get_exp(nd_decimal decim);
+int set_exp(nd_decimal *decim, int new_exp);
 int swap_int(int *value1, int *value2);
-int truncate_to_exp(s21_decimal decim, int new_exp,
-                    s21_decimal *result_decimal);
+int truncate_to_exp(nd_decimal decim, int new_exp,
+                    nd_decimal *result_decimal);
 
 int swift_bits_right(int bits, int number);
-s21_decimal bit_swift_right(s21_decimal decim, int number);
-int bit_swift_left(s21_decimal decim, int number, s21_decimal *result);
-s21_decimal bit_exclusive_or(s21_decimal decim1, s21_decimal decim2);
-s21_decimal bit_and(s21_decimal decim1, s21_decimal decim2);
-s21_decimal bit_negative(s21_decimal decim);
-s21_decimal bit_or(s21_decimal decim1, s21_decimal decim2);
-s21_decimal s21_decimal_get_inf(void);
+nd_decimal bit_swift_right(nd_decimal decim, int number);
+int bit_swift_left(nd_decimal decim, int number, nd_decimal *result);
+nd_decimal bit_exclusive_or(nd_decimal decim1, nd_decimal decim2);
+nd_decimal bit_and(nd_decimal decim1, nd_decimal decim2);
+nd_decimal bit_negative(nd_decimal decim);
+nd_decimal bit_or(nd_decimal decim1, nd_decimal decim2);
+nd_decimal nd_decimal_get_inf(void);
 
-int bank_round(s21_decimal *number, int n);
+int bank_round(nd_decimal *number, int n);
 int bank_rounding(int a);
-int balancing(s21_decimal *a, s21_decimal *b);
-int shifting(s21_decimal *a, int n);
-int s21_get_float_exp_from_string(char *str);
-s21_decimal s21_float_string_to_decimal(char *str);
-int s21_get_float_exp_from_string(char *str);
-s21_decimal s21_decimal_get_from_char(char c);
-s21_decimal s21_decimal_get_one(void);
-s21_decimal s21_int128_get_ten_pow(int pow);
+int balancing(nd_decimal *a, nd_decimal *b);
+int shifting(nd_decimal *a, int n);
+int nd_get_float_exp_from_string(char *str);
+nd_decimal nd_float_string_to_decimal(char *str);
+int nd_get_float_exp_from_string(char *str);
+nd_decimal nd_decimal_get_from_char(char c);
+nd_decimal nd_decimal_get_one(void);
+nd_decimal nd_int128_get_ten_pow(int pow);
 
 //степени числа 10
 // 10 ^ pow
 
-static const s21_decimal all_ten_pows[39] = {
+static const nd_decimal all_ten_pows[39] = {
     [0] = {{0x1, 0x0, 0x0, 0x0}},
     [1] = {{0xA, 0x0, 0x0, 0x0}},
     [2] = {{0x64, 0x0, 0x0, 0x0}},

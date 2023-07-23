@@ -1,11 +1,11 @@
 #include "decimal_core.h"
-#include "s21_decimal.h"
+#include "nd_decimal.h"
 
 // https://russianblogs.com/article/568550142/
 
 // add without degree and sign
-int add_lite(s21_decimal decim1, s21_decimal decim2,
-             s21_decimal* result_decimal) {
+int add_lite(nd_decimal decim1, nd_decimal decim2,
+             nd_decimal* result_decimal) {
   nullify_all_decimal(result_decimal);
   int error_mark = 0;
   for (int i = 0; i < 96; i++) {
@@ -22,8 +22,8 @@ int add_lite(s21_decimal decim1, s21_decimal decim2,
   return error_mark;
 }
 
-int s21_add(s21_decimal decim1, s21_decimal decim2,
-            s21_decimal* result_decimal) {
+int nd_add(nd_decimal decim1, nd_decimal decim2,
+            nd_decimal* result_decimal) {
   int error_mark = 0;
   int decim1_sign = check_sign(decim1);
   int decim2_sign = check_sign(decim2);
@@ -42,15 +42,15 @@ int s21_add(s21_decimal decim1, s21_decimal decim2,
   if (error_mark && scale) {
     bank_round(&decim1, 1);
     bank_round(&decim2, 1);
-    error_mark = s21_add(decim1, decim2, result_decimal);
+    error_mark = nd_add(decim1, decim2, result_decimal);
   } else {
     set_exp(result_decimal, scale);
   }
   return error_mark;
 }
 
-int sub_lite(s21_decimal decim1, s21_decimal decim2,
-             s21_decimal* result_decimal) {
+int sub_lite(nd_decimal decim1, nd_decimal decim2,
+             nd_decimal* result_decimal) {
   int error_mark = 0;
   nullify_all_decimal(result_decimal);
   for (int i = 0; i < 96; i++) {
@@ -92,12 +92,12 @@ int sub_lite(s21_decimal decim1, s21_decimal decim2,
 */
 
 //   ПРОВЕРИТЬ ЛОГИКУ !!!!
-int sub_sign(s21_decimal decim1, s21_decimal decim2,
-             s21_decimal* result_decimal) {
+int sub_sign(nd_decimal decim1, nd_decimal decim2,
+             nd_decimal* result_decimal) {
   int error_mark = 0;
   int sign_decim1 = check_sign(decim1);
   int sign_decim2 = check_sign(decim2);
-  int priority = s21_is_greater_or_equal(decim1, decim2);
+  int priority = nd_is_greater_or_equal(decim1, decim2);
 
   if (sign_decim1 == 1 && sign_decim2 == 1) {
     chang_sign(&decim1);
@@ -124,8 +124,8 @@ int sub_sign(s21_decimal decim1, s21_decimal decim2,
   return error_mark;
 }
 
-int s21_sub(s21_decimal decim1, s21_decimal decim2,
-            s21_decimal* result_decimal) {
+int nd_sub(nd_decimal decim1, nd_decimal decim2,
+            nd_decimal* result_decimal) {
   int error_mark = 0;
   nullify_all_decimal(result_decimal);
   balancing(&decim1, &decim2);
@@ -135,12 +135,12 @@ int s21_sub(s21_decimal decim1, s21_decimal decim2,
   return error_mark;
 }
 
-int mul_lite(s21_decimal decim1, s21_decimal decim2,
-             s21_decimal* result_decimal) {
+int mul_lite(nd_decimal decim1, nd_decimal decim2,
+             nd_decimal* result_decimal) {
   // nullify_all_decimal(result_decimal);
 
   int status = 0;
-  s21_decimal tmp = *result_decimal;
+  nd_decimal tmp = *result_decimal;
   int sign = check_sign(decim1) ^ check_sign(decim2);
   set_sign(&tmp, check_sign(decim1) ^ check_sign(decim2));
   set_sign(&decim2, 0);
@@ -162,8 +162,8 @@ int mul_lite(s21_decimal decim1, s21_decimal decim2,
   return status;
 }
 
-int s21_mul(s21_decimal decim1, s21_decimal decim2,
-            s21_decimal* result_decimal) {
+int nd_mul(nd_decimal decim1, nd_decimal decim2,
+            nd_decimal* result_decimal) {
   nullify_all_decimal(result_decimal);
   int error_mark = 0;  // mul_lite(decim1, decim2, result_decimal);
   if (is_null_decimal(decim1) == 1 || is_null_decimal(decim2) == 1) {
@@ -181,11 +181,11 @@ int s21_mul(s21_decimal decim1, s21_decimal decim2,
   return error_mark;
 }
 
-int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
+int div_lite(nd_decimal decim1, nd_decimal decim2, nd_decimal* result) {
   int status = 0;
-  s21_decimal one;
-  s21_from_int_to_decimal(1, &one);
-  s21_decimal temp;
+  nd_decimal one;
+  nd_from_int_to_decimal(1, &one);
+  nd_decimal temp;
   nullify_all_decimal(&temp);
   *result = one;
   if (is_equal_lite(decim1, decim2)) {
@@ -193,8 +193,8 @@ int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
   } else if (is_less_lite(decim1, decim2)) {
     nullify_all_decimal(result);
   } else {
-    s21_decimal divcopy = decim2;
-    s21_decimal tmp;
+    nd_decimal divcopy = decim2;
+    nd_decimal tmp;
     while (is_greater_lite(decim1, decim2) == 1 && status == 0) {
       tmp = decim2;
       status = bit_swift_left(decim2, 1, &decim2);
@@ -216,13 +216,13 @@ int div_lite(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
   return status;
 }
 
-int int_div(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
+int int_div(nd_decimal decim1, nd_decimal decim2, nd_decimal* result) {
   int error_mark = 0;
 
   if (is_null_decimal(decim2)) {
     error_mark = 3;
   } else {
-    s21_from_int_to_decimal(1, result);
+    nd_from_int_to_decimal(1, result);
 
     int sign = check_sign(decim1) ^ check_sign(decim2);
     set_sign(&decim1, 0);
@@ -246,11 +246,11 @@ int int_div(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
   return error_mark;
 }
 
-s21_decimal mod_lite(s21_decimal decim1, s21_decimal decim2) {
+nd_decimal mod_lite(nd_decimal decim1, nd_decimal decim2) {
   int status = 0;
-  s21_decimal divcopy = decim2;
-  s21_decimal res, tmp;
-  s21_decimal zero = {{0, 0, 0, 0}};
+  nd_decimal divcopy = decim2;
+  nd_decimal res, tmp;
+  nd_decimal zero = {{0, 0, 0, 0}};
   if (is_equal_lite(decim1, decim2))
     return zero;
   else if (is_less_lite(decim1, decim2))
@@ -273,7 +273,7 @@ s21_decimal mod_lite(s21_decimal decim1, s21_decimal decim2) {
   return res;
 }
 
-int mod_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
+int mod_sign(nd_decimal decim1, nd_decimal decim2, nd_decimal* result) {
   if (is_null_decimal(decim2)) return 3;
   nullify_all_decimal(result);
   int sign = check_sign(decim1);
@@ -284,7 +284,7 @@ int mod_sign(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
   return 0;
 }
 
-int s21_mod(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
+int nd_mod(nd_decimal decim1, nd_decimal decim2, nd_decimal* result) {
   balancing(&decim1, &decim2);
   int exp = get_exp(decim1);
   int res = mod_sign(decim1, decim2, result);
@@ -292,39 +292,39 @@ int s21_mod(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
   return res;
 }
 
-int additional_int_prec(s21_decimal decim1, s21_decimal decim2,
-                        s21_decimal* result, int status) {
+int additional_int_prec(nd_decimal decim1, nd_decimal decim2,
+                        nd_decimal* result, int status) {
   set_exp(&decim2, get_exp(decim2) - status);
   int decim1_sign = check_sign(decim1);
   int decim2_sign = check_sign(decim2);
-  s21_decimal mod_res, div_res;
+  nd_decimal mod_res, div_res;
   nullify_all_decimal(&div_res);
   nullify_all_decimal(&mod_res);
 
-  s21_mod(decim1, decim2, &mod_res);
+  nd_mod(decim1, decim2, &mod_res);
   shifting(&mod_res, -1);
 
   set_exp(&decim2, get_exp(decim2) + status);
 
   while (is_less_lite(mod_res, decim2)) bank_round(&decim2, 1);
   int_div(mod_res, decim2, &div_res);
-  status = s21_add(div_res, *result, result);
+  status = nd_add(div_res, *result, result);
   set_sign(result, decim1_sign ^ decim2_sign);
   return status;
 }
 
-int s21_div(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
+int nd_div(nd_decimal decim1, nd_decimal decim2, nd_decimal* result) {
   int status = int_div(decim1, decim2, result);
   if (!(status & 3)) {
     status >>= 2;
-    s21_decimal mod_res;
+    nd_decimal mod_res;
     nullify_all_decimal(&mod_res);
     if (status) status = additional_int_prec(decim1, decim2, result, status);
-    s21_truncate(*result, result);
-    s21_mod(decim1, decim2, &mod_res);
+    nd_truncate(*result, result);
+    nd_mod(decim1, decim2, &mod_res);
     if (!is_null_decimal_bin(mod_res)) {
-      s21_decimal div_res, tmp;
-      s21_decimal ten = {{10, 0, 0, 0}};
+      nd_decimal div_res, tmp;
+      nd_decimal ten = {{10, 0, 0, 0}};
       nullify_all_decimal(&div_res);
       nullify_all_decimal(&tmp);
       int exp = get_exp(mod_res);
@@ -339,7 +339,7 @@ int s21_div(s21_decimal decim1, s21_decimal decim2, s21_decimal* result) {
       while (is_less_lite(mod_res, decim2)) bank_round(&decim2, 1);
       int_div(mod_res, decim2, &div_res);
       if (exp > 28) set_exp(&div_res, exp - get_exp(decim2));
-      status = s21_add(div_res, *result, result);
+      status = nd_add(div_res, *result, result);
     }
   } else {
     status &= 3;
