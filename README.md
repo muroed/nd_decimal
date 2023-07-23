@@ -1,9 +1,9 @@
-# s21_decimal 
+# nd_decimal 
 
 > При старте работы над проектом просим вас постараться хронометрировать время работы над проектом.
 > По завершении работы над проектом просим вас ответить на два вопроса [в этом опросе](https://forms.gle/PFAxFfM4GJuQU1x59)
 
-Implementation of your own s21_decimal.h library.
+Implementation of your own nd_decimal.h library.
 
 The russian version of the task can be found in the repository.
 
@@ -20,7 +20,7 @@ The russian version of the task can be found in the repository.
 
 ## Chapter I
 
-![s21_decimal](misc/images/s21_decimal.png)
+![nd_decimal](misc/images/nd_decimal.png)
 
 Planet Earth, 1990s. 
 
@@ -51,7 +51,7 @@ At the follow-up meeting:
 
 ## Introduction
 
-In this project you will implement the s21_decimal.h library in the C programming language. This library should add the ability to work with the "decimal" type, which is not in the language standard. Nevertheless, this type is critically important. For financial calculations, for example, where errors of calculations characteristic of types with floating point are unacceptable. As part of the project you will work with the tasks of processing financial information, dive into the issues of internal representation of different types of data, and solidify knowledge of structured programming.
+In this project you will implement the nd_decimal.h library in the C programming language. This library should add the ability to work with the "decimal" type, which is not in the language standard. Nevertheless, this type is critically important. For financial calculations, for example, where errors of calculations characteristic of types with floating point are unacceptable. As part of the project you will work with the tasks of processing financial information, dive into the issues of internal representation of different types of data, and solidify knowledge of structured programming.
 
 
 ## Chapter II
@@ -90,18 +90,18 @@ Note that the bit representation differentiates between negative and positive ze
 typedef struct 
 {
     int bits[4];
-} s21_decimal;
+} nd_decimal;
 ```
 
 ### Arithmetic Operators
 
 | Operator name | Operators  | Function                                                                           | 
 | ------ | ------ |------------------------------------------------------------------------------------|
-| Addition | + | int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result)         |
-| Subtraction | - | int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) |
-| Multiplication | * | int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) | 
-| Division | / | int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) |
-| Modulo | Mod | int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) |
+| Addition | + | int nd_add(nd_decimal value_1, nd_decimal value_2, nd_decimal *result)         |
+| Subtraction | - | int nd_sub(nd_decimal value_1, nd_decimal value_2, nd_decimal *result) |
+| Multiplication | * | int nd_mul(nd_decimal value_1, nd_decimal value_2, nd_decimal *result) | 
+| Division | / | int nd_div(nd_decimal value_1, nd_decimal value_2, nd_decimal *result) |
+| Modulo | Mod | int nd_mod(nd_decimal value_1, nd_decimal value_2, nd_decimal *result) |
 
 The functions return the error code:
 - 0 - OK
@@ -120,12 +120,12 @@ The functions return the error code:
 
 | Operator name | Operators  | Function | 
 | ------ | ------ | ------ |
-| Less than | < | int s21_is_less(s21_decimal, s21_decimal) |
-| Less than or equal to | <= | int s21_is_less_or_equal(s21_decimal, s21_decimal) | 
-| Greater than | > |  int s21_is_greater(s21_decimal, s21_decimal) |
-| Greater than or equal to | >= | int s21_is_greater_or_equal(s21_decimal, s21_decimal) | 
-| Equal to | == |  int s21_is_equal(s21_decimal, s21_decimal) |
-| Not equal to | != |  int s21_is_not_equal(s21_decimal, s21_decimal) |
+| Less than | < | int nd_is_less(nd_decimal, nd_decimal) |
+| Less than or equal to | <= | int nd_is_less_or_equal(nd_decimal, nd_decimal) | 
+| Greater than | > |  int nd_is_greater(nd_decimal, nd_decimal) |
+| Greater than or equal to | >= | int nd_is_greater_or_equal(nd_decimal, nd_decimal) | 
+| Equal to | == |  int nd_is_equal(nd_decimal, nd_decimal) |
+| Not equal to | != |  int nd_is_not_equal(nd_decimal, nd_decimal) |
 
 Return value:
 - 0 - FALSE
@@ -135,10 +135,10 @@ Return value:
 
 | Convertor/parser | Function | 
 | ------ | ------ |
-| From int  | int s21_from_int_to_decimal(int src, s21_decimal *dst) |
-| From float  | int s21_from_float_to_decimal(float src, s21_decimal *dst) |
-| To int  | int s21_from_decimal_to_int(s21_decimal src, int *dst) |
-| To float  | int s21_from_decimal_to_float(s21_decimal src, float *dst) |
+| From int  | int nd_from_int_to_decimal(int src, nd_decimal *dst) |
+| From float  | int nd_from_float_to_decimal(float src, nd_decimal *dst) |
+| To int  | int nd_from_decimal_to_int(nd_decimal src, int *dst) |
+| To float  | int nd_from_decimal_to_float(nd_decimal src, float *dst) |
 
 Return value - code error:
 - 0 - OK
@@ -157,10 +157,10 @@ Return value - code error:
 
 | Description | Function                                                         | 
 | ------ |------------------------------------------------------------------|
-| Rounds a specified Decimal number to the closest integer toward negative infinity. | int s21_floor(s21_decimal value, s21_decimal *result)            |	
-| Rounds a decimal value to the nearest integer. | int s21_round(s21_decimal value, s21_decimal *result)    |
-| Returns the integral digits of the specified Decimal; any fractional digits are discarded, including trailing zeroes. | int s21_truncate(s21_decimal value, s21_decimal *result) |
-| Returns the result of multiplying the specified Decimal value by negative one. | int s21_negate(s21_decimal value, s21_decimal *result)   |
+| Rounds a specified Decimal number to the closest integer toward negative infinity. | int nd_floor(nd_decimal value, nd_decimal *result)            |	
+| Rounds a decimal value to the nearest integer. | int nd_round(nd_decimal value, nd_decimal *result)    |
+| Returns the integral digits of the specified Decimal; any fractional digits are discarded, including trailing zeroes. | int nd_truncate(nd_decimal value, nd_decimal *result) |
+| Returns the result of multiplying the specified Decimal value by negative one. | int nd_negate(nd_decimal value, nd_decimal *result)   |
 
 Return value - code error:
 - 0 - OK
@@ -175,14 +175,14 @@ The functions of the decimal.h library described [above](#information) must be i
 - The library code must be located in the src folder on the develop branch   
 - Do not use outdated and legacy language constructions and library functions. Pay attention to the legacy and obsolete marks in the official documentation on the language and the libraries used. Use the POSIX.1-2017 standard.
 - When writing code it is necessary to follow the Google style
-- Make it as a static library (with the s21_decimal.h header file)
+- Make it as a static library (with the nd_decimal.h header file)
 - The library must be developed according to the principles of structured programming;
-- Use prefix s21_ before each function
+- Use prefix nd_ before each function
 - Prepare full coverage of library functions code with unit-tests using the Check library
 - Unit tests must cover at least 80% of each function (checked using gcov)   
-- Provide a Makefile for building the library and tests (with targets all, clean, test, s21_decimal.a, gcov_report)  
+- Provide a Makefile for building the library and tests (with targets all, clean, test, nd_decimal.a, gcov_report)  
 - The gcov_report target should generate a gcov report in the form of an html page. Unit tests must be run with gcov flags to do this
 - When implementing decimal, stick to [the binary representation](#binary-representation) with the integer `bits` array as specified in the [example above](#example). Observe the position of the digits of a number in the `bits` array
 - It is forbidden to use the __int128 type
-- Trailing zeros can be as preserved as deleted (except for the `s21_truncate` function)
+- Trailing zeros can be as preserved as deleted (except for the `nd_truncate` function)
 - The defined type must support numbers from -79,228,162,514,264,337,593,543,950,335 to +79,228,162,514,264,337,593,543,950,335.
