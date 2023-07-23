@@ -1,5 +1,5 @@
-#include "s21_decimal.h"
 #include "decimal_core.h"
+#include "s21_decimal.h"
 
 int shifting(s21_decimal *a, int n) {
   /// Multiply the number by 10 and increase the exponent by 1 thereby shifting
@@ -12,7 +12,7 @@ int shifting(s21_decimal *a, int n) {
   int status = exp == 28;
 
   while (!status && n--) {
-    status = mul_sign(*a, ten, &tmp_result);
+    status = mul_lite(*a, ten, &tmp_result);
     if (!status) {
       *a = tmp_result;
       nullify_all_decimal(&tmp_result);
@@ -45,10 +45,9 @@ int balancing(s21_decimal *a, s21_decimal *b) {
   return OK;
 }
 
-
 int bank_rounding(int a) {
   /// returns 1 if you need to apply bank rounding or 0 if not
-  return (a % 10 > 5 || (a % 10 == 5 && (a / 10) % 2));
+  return (a % 10 >= 5 || (a % 10 == 5 && (a / 10) % 2));
 }
 
 int bank_round(s21_decimal *number, int n) {
@@ -75,4 +74,3 @@ int bank_round(s21_decimal *number, int n) {
 
   return OK;
 }
-
